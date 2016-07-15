@@ -1,0 +1,63 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Python PEP8 commit hook for git"><title>Pre-commit Hook - PEP8 Version</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="pre-commit-hook">Pre-commit Hook</h1><h2 id="pep8-version">PEP8 Version</h2><p>A couple of days ago I’ve refactored and enhanced my pre-commit hook to check also for PEP8 compliancy of Python source files. To achieve this I used the pep8 tool that you can easily install with:</p><p><code>pip install pep8</code></p><p>And here’s the new pre-commit hook:</p><pre><code><span class="hljs-meta">#!/bin/bash</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># TAB CHECK:</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Searches tab characters in staged changes.</span>
+<span class="hljs-comment"># To specify file extensions to check use "hooks.notabs" variable.</span>
+<span class="hljs-comment"># Extensions are separated by "|".</span>
+<span class="hljs-comment"># Eg:</span>
+<span class="hljs-comment">#   git config hooks.notabs html|js</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># PEP8 CHECK:</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># run pep8 on all python staged files.</span>
+<span class="hljs-comment"># To specify pep8 command options use "hook.pep8options" variable</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Eg:</span>
+<span class="hljs-comment">#   git config hook.pep8 "--ignore=E226,E302"</span>
+
+<span class="hljs-built_in">exec</span> 1&gt;&amp;2
+
+notabs=$(git config hooks.notabs)
+notabs_error=0
+<span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> `git diff --cached --name-only | egrep <span class="hljs-string">"\.("</span><span class="hljs-variable">$notabs</span><span class="hljs-string">")$"</span>`
+<span class="hljs-keyword">do</span>
+    lines=`git show :<span class="hljs-variable">$f</span> | fgrep -n $<span class="hljs-string">'\t'</span>`
+    <span class="hljs-keyword">if</span> [ -n <span class="hljs-string">"<span class="hljs-variable">$lines</span>"</span> ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"TAB(s) found in:"</span> <span class="hljs-variable">$f</span> <span class="hljs-string">"at line(s)"</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-variable">$lines</span>
+        notabs_error=1
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">done</span>
+
+<span class="hljs-keyword">if</span> [ <span class="hljs-variable">$notabs_error</span> <span class="hljs-_">-eq</span> 1 ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Remove all TAB(s) characters and stage again your changes."</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+
+pep8_options=$(git config hooks.pep8options)
+pep8_error=0
+<span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> `git diff --cached --name-only | egrep <span class="hljs-string">".py$"</span>`
+<span class="hljs-keyword">do</span>
+    git show :<span class="hljs-variable">$f</span> | pep8 --format=<span class="hljs-variable">$f</span><span class="hljs-string">":%(row)d:%(col)d: %(code)s %(text)s"</span> <span class="hljs-variable">$pep8_options</span> -
+    <span class="hljs-keyword">if</span> [ $? <span class="hljs-_">-eq</span> 1 ]; <span class="hljs-keyword">then</span>
+        pep8_error=1
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">done</span>
+
+<span class="hljs-keyword">if</span> [ <span class="hljs-variable">$pep8_error</span> <span class="hljs-_">-eq</span> 1 ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Your commit is cause of one or more PEP8 error(s)"</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Please fix these errors and stage again your changes"</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</code></pre><p>This new version is quite straightforward so I’m not digging too much into it. The two main changes are:</p><ul><li>Discover of command <code>git show</code> :)</li><li>Add pep8 style test</li></ul><p>About the latter point, it’s important to say that the pep8 has becomes one of the requirements to use this hook. Also, you can configure your pep8 options by typing:</p><p><code>git config --add hooks.pep8options &quot;--ignore=E121,E122&quot; # this ignores Error 121, 122</code></p><p>A complete list of errors and warnings of pep8 tool is available here: <a href="http://pep8.readthedocs.org/en/latest/intro.html#error-codes">http://pep8.readthedocs.org/en/latest/intro.html#error-codes</a></p><p>PS.</p><p>I’m using this hook just from a couple of days, so it may (probably) have some bugs… feel free to contribute at <a href="https://github.com/cybercase/funproject/blob/master/experiments/pre-commit">https://github.com/cybercase/funproject/blob/master/experiments/pre-commit</a> ;)</p><p><em>– 15/09/2013</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

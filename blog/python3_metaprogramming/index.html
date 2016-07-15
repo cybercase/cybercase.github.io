@@ -1,0 +1,223 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Experimenting with Python 3 Metaprogramming"><title>Python 3 Metaprogramming</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="python-3-metaprogramming">Python 3 Metaprogramming</h1><p>How can you import XML files into Python 3? And why you would? … This blogpost doesn’t answer this last question, but it’s definetly going to answer the first one :)</p><p>Everything I’m writing is taken from this talk from David Beazley: <a href="https://www.youtube.com/watch?v=sPiWg5jSoZI">youtube video</a>. Consider this post as a very little summary of its contents.</p><p>Let’s start with the requirements: Python 3.3 … that’s all!</p><p>And let’s see what you’re getting:</p><p>If you define a file structures.xml like this</p><pre><code><span class="hljs-tag">&lt;<span class="hljs-name">structures</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">structure</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"Stock"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">field</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"SizedString"</span> <span class="hljs-attr">maxlen</span>=<span class="hljs-string">"4"</span>&gt;</span>name<span class="hljs-tag">&lt;/<span class="hljs-name">field</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">field</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"PosInteger"</span>&gt;</span>shares<span class="hljs-tag">&lt;/<span class="hljs-name">field</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">field</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"PosFloat"</span>&gt;</span>price<span class="hljs-tag">&lt;/<span class="hljs-name">field</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">structure</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">structures</span>&gt;</span>
+</code></pre><p>At the end of this blogpost you will get this</p><pre><code><span class="hljs-meta">&gt;&gt;</span>&gt; from structures import *
+&gt;&gt;&gt; s = Stock(<span class="hljs-string">"GOOG"</span>, <span class="hljs-number">100</span>, <span class="hljs-number">99.0</span>)
+<span class="hljs-meta">&gt;&gt;</span>&gt; <span class="hljs-comment"># DEFAULT INITIALIZER</span>
+<span class="hljs-meta">&gt;&gt;</span>&gt; s.name, s.shares, s.price
+(<span class="hljs-string">'GOOG'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1.0</span>)
+
+<span class="hljs-meta">&gt;&gt;</span>&gt; <span class="hljs-comment"># TYPE CHECKING</span>
+<span class="hljs-meta">&gt;&gt;</span>&gt; s.name = <span class="hljs-number">100</span>
+<span class="hljs-symbol">TypeError:</span> Expected &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> '<span class="hljs-title">str</span>'&gt;</span>
+
+<span class="hljs-meta">&gt;&gt;</span>&gt; <span class="hljs-comment"># CONSTRAINT CHECKING</span>
+<span class="hljs-meta">&gt;&gt;</span>&gt; s.name = <span class="hljs-string">"GOOOOOOG"</span>
+<span class="hljs-symbol">ValueError:</span> Too big
+</code></pre><p>So, if this just aroused your curiosity, go on reading ;)</p><p>The first step is to have a look at descriptors. Descriptors is just how properties are implemented in python [see this link]. In this example, we use them as classes to perform checks on values assignment. So, let’s take as example a descriptor that performs a check such that only values of type str within a certain length are allowed.</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StringDescriptor</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name, maxlen)</span></span>:
+        <span class="hljs-keyword">self</span>.name = name
+        <span class="hljs-keyword">self</span>.maxlen = maxlen
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__set__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, instance, value)</span></span>:
+        <span class="hljs-keyword">if</span> type(value) != <span class="hljs-symbol">str:</span>
+            raise TypeError(<span class="hljs-string">"Wrong type, expected: %s"</span> % str(str))
+        elif len(value) &gt; <span class="hljs-keyword">self</span>.<span class="hljs-symbol">maxlen:</span>
+            raise ValueError(<span class="hljs-string">"String too long"</span>)
+        instance.__dict_<span class="hljs-number">_</span>[<span class="hljs-keyword">self</span>.name] = value
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__get__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, instance, cls)</span></span>:
+        <span class="hljs-comment"># Actually performs the default action. Just don't define this</span>
+        <span class="hljs-comment"># method to get the default behavior.</span>
+        <span class="hljs-keyword">return</span> instance.__dict_<span class="hljs-number">_</span>[<span class="hljs-keyword">self</span>.name]
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stock</span>:</span>
+    name = StringDescriptor(<span class="hljs-string">"name"</span>, <span class="hljs-number">4</span>)
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name)</span></span>:
+        <span class="hljs-keyword">self</span>.name = name
+
+<span class="hljs-meta">&gt;&gt;</span>&gt; st = Stock(<span class="hljs-string">"GOOG"</span>)
+<span class="hljs-meta">&gt;&gt;</span>&gt; st.name = <span class="hljs-string">"GOOOOOG"</span>
+Traceback (most recent call last):
+  File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;<span class="hljs-class"><span class="hljs-keyword">module</span>&gt;</span>
+  File <span class="hljs-string">"post.py"</span>, line <span class="hljs-number">10</span>, <span class="hljs-keyword">in</span> __set_<span class="hljs-number">_</span>
+    raise ValueError(<span class="hljs-string">"String too long"</span>)
+<span class="hljs-symbol">ValueError:</span> String too long
+
+<span class="hljs-meta">&gt;&gt;</span>&gt; st.name = <span class="hljs-number">1</span>
+
+Traceback (most recent call last):
+  File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;<span class="hljs-class"><span class="hljs-keyword">module</span>&gt;</span>
+  File <span class="hljs-string">"post.py"</span>, line <span class="hljs-number">8</span>, <span class="hljs-keyword">in</span> __set_<span class="hljs-number">_</span>
+    raise TypeError(<span class="hljs-string">"Wrong type, expected: %s"</span> % str(str))
+<span class="hljs-symbol">TypeError:</span> Wrong type, <span class="hljs-symbol">expected:</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> '<span class="hljs-title">str</span>'&gt;</span>
+
+To handle different descriptors, David uses a descriptors hierarchy like the <span class="hljs-symbol">following:</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Descriptor</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, name=None)</span></span>:
+        <span class="hljs-keyword">self</span>.name = name
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__set__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, instance, value)</span></span>:
+        instance.__dict_<span class="hljs-number">_</span>[<span class="hljs-keyword">self</span>.name] = value
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__delete__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, instance)</span></span>:
+        raise AttributeError(<span class="hljs-string">"Can't delete"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Typed</span>(<span class="hljs-title">Descriptor</span>):</span>
+    ty = object
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__set__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, instance, value)</span></span>:
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> isinstance(value, <span class="hljs-keyword">self</span>.ty):
+            raise TypeError(<span class="hljs-string">'Expected %s'</span> % <span class="hljs-keyword">self</span>.ty)
+        <span class="hljs-keyword">super</span>().__set_<span class="hljs-number">_</span>(instance, value)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Sized</span>(<span class="hljs-title">Descriptor</span>):</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, *args, maxlen, **kwargs)</span></span>:
+        <span class="hljs-keyword">self</span>.maxlen = maxlen
+        <span class="hljs-keyword">super</span>().__init_<span class="hljs-number">_</span>(*args, **kwargs)
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__set__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, instance, value)</span></span>:
+        <span class="hljs-keyword">if</span> len(value) &gt; <span class="hljs-keyword">self</span>.<span class="hljs-symbol">maxlen:</span>
+            raise ValueError(<span class="hljs-string">'Too big'</span>)
+        <span class="hljs-keyword">super</span>().__set_<span class="hljs-number">_</span>(instance, value)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">String</span>(<span class="hljs-title">Typed</span>):</span>
+    ty = str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Integer</span>(<span class="hljs-title">Typed</span>):</span>
+    ty = int
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Float</span>(<span class="hljs-title">Typed</span>):</span>
+    ty = float
+</code></pre><p>Then merges the descriptors using multiple inheritance… But pay attention at MRO! (method resolution order)</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Positive</span><span class="hljs-params">(Descriptor)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__set__</span><span class="hljs-params">(self, instance, value)</span>:</span>
+        <span class="hljs-keyword">if</span> value &lt; <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Expected &gt;= 0'</span>)
+        super().__set__(instance, value)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PosInteger</span><span class="hljs-params">(Integer, Positive)</span>:</span>
+    <span class="hljs-keyword">pass</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PosFloat</span><span class="hljs-params">(Float, Positive)</span>:</span>
+    <span class="hljs-keyword">pass</span>
+</code></pre><p>Finally to get rid of the repeated variable’s name in the descriptor constructor, David use a metaclass to inject the name into the descriptor:</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StructMeta</span><span class="hljs-params">(type)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__new__</span><span class="hljs-params">(cls, name, bases, clsdict)</span>:</span>
+        fields = [ key <span class="hljs-keyword">for</span> key, val <span class="hljs-keyword">in</span> clsdict.items()
+                <span class="hljs-keyword">if</span> isinstance(val, Descriptor) ]
+        <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> fields:
+            clsdict[name].name = name
+        clsobj = super().__new__(cls, name, bases, clsdict)
+        <span class="hljs-keyword">return</span> clsobj
+</code></pre><p>The Stock class definition now becomes</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stock</span><span class="hljs-params">(metaclass=StructMeta)</span>:</span>
+    name = SizedString(maxlen=<span class="hljs-number">4</span>)
+    shares = PosInteger()
+    price = PosFloat()
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, name, shares, price)</span>:</span>
+        self.name = name
+        self.shares = shares
+        self.price = price
+</code></pre><p>There is still another “problem” that David try to solve: the code repetition inside the <strong>init</strong> method. To address this problem, he changes the previous metaclass as follows. from collections import OrderedDict</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StructMeta</span><span class="hljs-params">(type)</span>:</span>
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__prepare__</span><span class="hljs-params">(cls, name, bases=None)</span>:</span>
+        <span class="hljs-comment"># this method returns the dictionary used by the class instance.</span>
+        <span class="hljs-comment"># To generate a signature the parameters order is crucial, so an</span>
+        <span class="hljs-comment"># OrderedDict is used</span>
+        <span class="hljs-keyword">return</span> OrderedDict()
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__new__</span><span class="hljs-params">(cls, name, bases, clsdict)</span>:</span>
+        fields = [ key <span class="hljs-keyword">for</span> key, val <span class="hljs-keyword">in</span> clsdict.items()
+                <span class="hljs-keyword">if</span> isinstance(val, Descriptor) ]
+        <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> fields:
+            clsdict[name].name = name
+
+        <span class="hljs-comment"># the following block generates the code for __init__ method</span>
+        <span class="hljs-keyword">if</span> len(fields):
+            init_code = <span class="hljs-string">'def __init__(self, %s):\n'</span> % \
+                        <span class="hljs-string">', '</span>.join(fields)
+            <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> fields:
+                init_code += <span class="hljs-string">'    self.%s = %s\n'</span> % (name, name)
+            exec(init_code, globals(), clsdict)
+
+        clsobj = super().__new__(cls, name, bases, dict(clsdict))
+        <span class="hljs-keyword">return</span> clsobj
+</code></pre><p>And the Stock class becomes</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Stock</span>(<span class="hljs-title">metaclass</span>=<span class="hljs-type">StructMeta</span>):
+    name = <span class="hljs-type">SizedString</span>(<span class="hljs-title">maxlen</span>=4)
+    shares = <span class="hljs-type">PosInteger</span>()
+    price = <span class="hljs-type">PosFloat</span>()</span>
+</code></pre><p>At this point it’s convenient introduce a Structure base class:</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Structure</span>(<span class="hljs-title">metaclass</span>=<span class="hljs-type">StructMeta</span>):
+    pass
+
+<span class="hljs-keyword">class</span> <span class="hljs-type">Stock</span>(<span class="hljs-type">Structure</span>):
+    name = <span class="hljs-type">SizedString</span>(<span class="hljs-title">maxlen</span>=4)
+    shares = <span class="hljs-type">PosInteger</span>()
+    price = <span class="hljs-type">PosFloat</span>()</span>
+</code></pre><p>And finally we get to the XML part :) The first goal is to generate the python code from the XML file. To achieve this the David use these functions:</p><pre><code><span class="hljs-keyword">from</span> xml.etree.ElementTree <span class="hljs-keyword">import</span> parse
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_xml_to_code</span><span class="hljs-params">(filename)</span>:</span>
+    doc = parse(filename)
+    code = <span class="hljs-string">''</span>
+    <span class="hljs-keyword">for</span> st <span class="hljs-keyword">in</span> doc.findall(<span class="hljs-string">'structure'</span>):
+        code += _xml_struct_code(st)
+    <span class="hljs-keyword">return</span> code
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_xml_struct_code</span><span class="hljs-params">(st)</span>:</span>
+    stname = st.get(<span class="hljs-string">'name'</span>)
+    code = <span class="hljs-string">'class %s(Structure):\n'</span> % stname
+    <span class="hljs-keyword">for</span> field <span class="hljs-keyword">in</span> st.findall(<span class="hljs-string">'field'</span>):
+        name = field.text.strip()
+        dtype = field.get(<span class="hljs-string">'type'</span>)
+        kwargs = <span class="hljs-string">', '</span>.join(<span class="hljs-string">'%s=%s'</span> % (key, val)
+                            <span class="hljs-keyword">for</span> key, val <span class="hljs-keyword">in</span> field.items()
+                            <span class="hljs-keyword">if</span> key != <span class="hljs-string">'type'</span>)
+        code += <span class="hljs-string">'    %s = %s(%s)\n'</span> % (name, dtype, kwargs)
+    <span class="hljs-keyword">return</span> code
+</code></pre><p>And the result of parsing the structure.xml file (defined at the beginning of the blogpost) is:</p><pre><code>&gt;&gt;&gt; print(_xml_to_code(<span class="hljs-string">"structures.xml"</span>))
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Stock</span>(<span class="hljs-type">Structure</span>):
+    name = <span class="hljs-type">SizedString</span>(<span class="hljs-title">maxlen</span>=4)
+    shares = <span class="hljs-type">PosInteger</span>()
+    price = <span class="hljs-type">PosFloat</span>()</span>
+</code></pre><p>The final step consists in hooking to the python import system. Full details about the new Import Hooks feature of Python3.3 are found at [PEP-302]. We begin defining a new importer class to append at sys.meta_path</p><pre><code><span class="hljs-keyword">import</span> os
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StructImporter</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, path)</span>:</span>
+        self._path = path
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">find_module</span><span class="hljs-params">(self, fullname, path=None)</span>:</span>
+        name = fullname.rpartition(<span class="hljs-string">'.'</span>)[<span class="hljs-number">-1</span>]
+        <span class="hljs-keyword">if</span> path <span class="hljs-keyword">is</span> <span class="hljs-keyword">None</span>:
+            path = self._path
+        <span class="hljs-keyword">for</span> dn <span class="hljs-keyword">in</span> path:
+            filename = os.path.join(dn, name+<span class="hljs-string">'.xml'</span>)
+            <span class="hljs-keyword">if</span> os.path.exists(filename):
+                <span class="hljs-keyword">return</span> StructXMLLoader(filename)
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">None</span>
+</code></pre><p>And an XML module loader</p><pre><code><span class="hljs-keyword">import</span> imp
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StructXMLLoader</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, filename)</span>:</span>
+        self._filename = filename
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">load_module</span><span class="hljs-params">(self, fullname)</span>:</span>
+        mod = sys.modules.setdefault(fullname,
+                                    imp.new_module(fullname))
+        mod.__file__ = self._filename
+        mod.__loader__ = self
+        code = _xml_to_code(self._filename)
+        <span class="hljs-comment"># actually this is bad. I should use mod.__dict__</span>
+        <span class="hljs-comment"># instead of globals(), and add an import statement into</span>
+        <span class="hljs-comment"># "code" to load Structure and the other classes.</span>
+        exec(code, globals(), mod.__dict__)
+        <span class="hljs-keyword">return</span> mod
+
+<span class="hljs-keyword">import</span> sys
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">install_importer</span><span class="hljs-params">(path=sys.path)</span>:</span>
+    sys.meta_path.append(StructImporter(path))
+
+install_importer()
+
+And <span class="hljs-keyword">finally</span> here we are:
+Python3<span class="hljs-number">.3</span> -i xmlimport.py
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> structures <span class="hljs-keyword">import</span> *
+<span class="hljs-meta">&gt;&gt;&gt; </span>s = Stock(<span class="hljs-string">"GOOG"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1.0</span>)
+</code></pre><p>You can find the final version of the xmlimporter.py and structures.xml under the folder</p><p><code>python_metaprogramming</code> in my git repository at:</p><p><code>git://github.com/cybercase/funproject.git</code></p><p>If you got 3 hours to spend, and a lot of love for this metaprogramming stuff, I really suggest to watch the entire video from David Beazley. Also, I apologize in advance for any error in this blogpost.</p><p><em>– 22/05/2013</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

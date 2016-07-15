@@ -1,0 +1,68 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Code I wrote after reading a book"><title>Inspiration Code</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="inspiration-code">Inspiration Code</h1><p>A couple of week ago I run into Modern C++ Design, a book from Andrei Alexandrescu. I read it all the way in just a few days. That was so fascinating! This book shows you the unknown and magic power of template metaprogramming… a kind of <em>avada kedavra</em> of C++.</p><p>I’ve got uncertain reviews from my colleagues about this book… But my opinion is definitely a ten out of ten.</p><p>But now, let’s get to the topic! Just a few day ago, I started writing some code for one of my so-called “funprojects”. A snippet of code contained in thread.h file to wraps pthreads functions with a Thread class. After few attempts I decided that my Thread class should be able to execute everything that is a callable in C++.</p><p>From Modern C++ Design, here is the list of entities that support operator <code>()</code>.</p><ul><li>C-like functions</li><li>C-like pointers to functions</li><li>References to functions</li><li>Functors (object that defines operator() )</li></ul><p>The result of applying operator <code>.*</code> or operator <code>-&gt;*</code> having a pointer to a member function in the right-hand side of the expression. The behavior that I was trying to achieve for any of them was</p><p><code>RETURN_TYPE result = Thread::run(some_callable, arg1, arg2, ...);</code></p><p>And this is what I’ve got in the end</p><pre><code><span class="hljs-comment">// main.cpp</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-string">"thread.h"</span></span>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">myfun</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i)</span>
+</span>{
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"myfun received: "</span> &lt;&lt; i &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    <span class="hljs-keyword">return</span> i*<span class="hljs-number">2</span>;
+}
+
+<span class="hljs-keyword">class</span> myclass
+{
+<span class="hljs-keyword">public</span>:
+
+    myclass(<span class="hljs-keyword">int</span> i) : i(i) {}
+
+    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">mymember</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k)</span>
+    </span>{
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"mymember received: "</span> &lt;&lt; k &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        <span class="hljs-keyword">return</span> i*<span class="hljs-number">2</span>;
+    }
+    <span class="hljs-keyword">int</span> i;
+
+    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-keyword">int</span> j)</span>
+    </span>{
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cerr</span> &lt;&lt; <span class="hljs-string">"operator received: "</span> &lt;&lt; j &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        <span class="hljs-keyword">return</span> i*<span class="hljs-number">2</span>;
+    }
+
+};
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>** argv)</span>
+</span>{
+
+    <span class="hljs-keyword">int</span> (*mypt)(<span class="hljs-keyword">int</span>) = &amp;myfun;
+    <span class="hljs-keyword">int</span> (&amp;myref)(<span class="hljs-keyword">int</span>) = myfun;
+    <span class="hljs-function">myclass <span class="hljs-title">mc</span><span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;
+
+    <span class="hljs-comment">// Call to function</span>
+    Result&lt;<span class="hljs-keyword">int</span>&gt; r0 = Thread::run(myfun, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"retval:"</span> &lt;&lt; r0.value() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+
+    <span class="hljs-comment">// Call to function pointer</span>
+    Result&lt;<span class="hljs-keyword">int</span>&gt; r1 = Thread::run(mypt, <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"retval:"</span> &lt;&lt; r1.value() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+
+    <span class="hljs-comment">// Call to function reference</span>
+    Result&lt;<span class="hljs-keyword">int</span>&gt; r2 = Thread::run(myref, <span class="hljs-number">2</span>);
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"retval:"</span> &lt;&lt; r2.value() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+
+    <span class="hljs-comment">// Call to functor</span>
+    Result&lt;<span class="hljs-keyword">int</span>&gt; r3 = Thread::run&lt;<span class="hljs-keyword">int</span>&gt;(mc, <span class="hljs-number">3</span>);
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"retval:"</span> &lt;&lt; r3.value() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+
+    <span class="hljs-comment">// Call to member function pointer</span>
+    Result&lt;<span class="hljs-keyword">int</span>&gt; r4 = Thread::run(&amp;mc, &amp;myclass::mymember, <span class="hljs-number">4</span>);
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"retval:"</span> &lt;&lt; r4.value() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre><p>In the next post I’m going to show some details of the code in <code>thread.h</code>.</p><p>Want to compile and run this code?!</p><pre><code>git <span class="hljs-keyword">clone</span> <span class="hljs-title">git</span>://github.com/cybercase/funproject.git
+cd funproject/other
+g++ concurrent.cpp -o concurrent -Wall <span class="hljs-comment"># add -lpthread if you are on a linux system</span>
+</code></pre><p><em>– 19/12/2011</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

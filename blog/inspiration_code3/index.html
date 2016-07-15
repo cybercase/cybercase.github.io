@@ -1,0 +1,118 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Code I wrote after reading a book - third part"><title>Inspiration Code - part 3</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="inspiration-code">Inspiration Code</h1><h2 id="part-3">Part 3</h2><p>The last of these three parts summary is about <code>_thread</code> and <code>Result</code> structures.</p><p><code>_thread</code> is a just a container for <code>pthread_t</code> and <code>pthread_attr_t</code> thread variables. It provides a wrapper for pthread_create and pthread_detach functions, and a member variable for storing the called function return value… However the most important task accomplished by this structure is reference counting.</p><pre><code>template &lt;typename T&gt; struct _thread
+{
+    <span class="hljs-comment">// This struct will hold the return value of the thread called func.</span>
+
+    _thread() : counter(0)
+    {
+        pthread_attr_init(&amp;attr);
+        pthread_attr_setdetachstate(&amp;attr, PTHREAD_CREATE_JOINABLE);
+    }
+
+    ~_thread() { pthread_detach(thd); }
+
+    T result;
+    pthread_t thd;
+    pthread_attr_t attr;
+    <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int</span> counter;
+
+    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">join</span><span class="hljs-params">()</span> </span>{ <span class="hljs-function"><span class="hljs-keyword">return</span> <span class="hljs-title">pthread_join</span><span class="hljs-params">(thd, NULL)</span></span>; }
+    <span class="hljs-keyword">int</span> start(<span class="hljs-keyword">void</span>*(f)(<span class="hljs-keyword">void</span>*), <span class="hljs-keyword">void</span>* v)
+    {
+        <span class="hljs-function"><span class="hljs-keyword">return</span> <span class="hljs-title">pthread_create</span><span class="hljs-params">(&amp;thd, &amp;attr, f, v)</span></span>;
+    }
+
+    <span class="hljs-comment">// Atomic function for add and sub</span>
+    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">inc</span><span class="hljs-params">()</span> </span>{ <span class="hljs-function"><span class="hljs-keyword">return</span> <span class="hljs-title">__sync_fetch_and_add</span><span class="hljs-params">(&amp;counter, <span class="hljs-number">1</span>)</span></span>; }
+    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">dec</span><span class="hljs-params">()</span>
+    </span>{
+        <span class="hljs-keyword">if</span> (__sync_fetch_and_sub(&amp;counter, <span class="hljs-number">1</span>) == <span class="hljs-number">0</span>)
+            delete <span class="hljs-keyword">this</span>;
+        <span class="hljs-keyword">return</span> counter;
+    }
+
+    <span class="hljs-keyword">private</span>:
+    _thread(<span class="hljs-keyword">const</span> _thread&amp;);
+    _thread&amp; operator=(<span class="hljs-keyword">const</span> _thread&amp;);
+};
+</code></pre><p><code>_thread</code> has both inc/dec member functions that are called everytime the structure instance is referenced/dereferenced by some other object. When the dec member function is called and the counter becomes zero, then the destructor is invoked and <code>_thread</code> is deleted. Also, the destructor calls <code>pthread_detach</code>, so that thread’s resources can be freed.</p><p>This reference counting mechanism is very important since we want that <code>_help_fn</code> and <code>_help_st</code> saves the computation results in a place from which we can fetch the result…</p><p>To clarify: we can’t just launch the thread (that executes <code>_help_fn</code>), save the results and delete everything. We need to be sure that we are deleting the result at the right time.</p><p>This is why, when a new thread is created, the corresponding <code>_thread</code> object is referenced both by a <code>_help_st</code> and a <code>Result</code> object. In this way, at the end of <code>_help_fn</code>, when <code>_help_st</code> is deleted, the dec function of <code>_thread</code> object is called by <code>_help_st</code> destructor… But <code>_thread</code> object is deleted only if also the corresponding <code>Result</code> object is already deleted.</p><pre><code>template &lt;typename T&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Result</span></span>
+{
+
+    <span class="hljs-built_in">Result</span>(_thread&lt;T&gt;* thd) : thd(thd)
+    {
+        thd-&gt;inc();
+    }
+
+    <span class="hljs-built_in">Result</span>(<span class="hljs-keyword">const</span> <span class="hljs-built_in">Result</span>&lt;T&gt;&amp; o)
+    {
+        thd-&gt;inc();
+        thd = o.thd;
+    }
+
+    <span class="hljs-built_in">Result</span>&lt;T&gt;&amp; operator=(<span class="hljs-keyword">const</span> <span class="hljs-built_in">Result</span>&amp; o)
+    {
+        o.thd-&gt;inc();
+        thd-&gt;dec();
+        thd = o.thd;
+        <span class="hljs-keyword">return</span> *this;
+    }
+
+    T value()
+    {
+        switch (thd-&gt;join())
+        {
+            case <span class="hljs-number">0</span>:
+              <span class="hljs-keyword">break</span>;
+            case EINVAL:
+              throw std::runtime_error(<span class="hljs-string">"EINVAL on pthread_join"</span>);
+              <span class="hljs-keyword">break</span>;
+            case EDEADLK:
+              throw std::runtime_error(<span class="hljs-string">"EDEADLK on pthread_join"</span>);
+              <span class="hljs-keyword">break</span>;
+            case ESRCH:
+              <span class="hljs-comment">// Thread already exited</span>
+              <span class="hljs-keyword">break</span>;
+        }
+        <span class="hljs-keyword">return</span> thd-&gt;result;
+    }
+
+    ~<span class="hljs-built_in">Result</span>()
+    {
+        thd-&gt;dec();
+    }
+
+    _thread&lt;T&gt;* thd;
+}
+</code></pre><p>The <code>Result</code> object is the one that is returned to the user who started a new thread. So, if the user keep it, he can fetch the return value through the <code>Result</code> object. Otherwise the <code>Result</code> object is automatically destroyed and corresponding <code>_thread</code> object is deleted when dec is called by <code>_help_st</code> destructor.</p><p>To close this last part, here are the static methods of <code>Thread</code> class for creating a new thread that runs a function, a functor or an instance method having one argument. The signature is similar for functions, functors, and instance methods having more than one arument. As you see the return value of these function is a <code>Result</code> object.</p><pre><code>template &lt;typename T, typename O, typename I0&gt; static Result&lt;T&gt;
+run(O obj, I0 a0)
+{
+    _functor1&lt;T, O, I0&gt; o(obj, a0);
+    <span class="hljs-keyword">return</span> Result&lt;T&gt;(_start&lt;T&gt;(o));
+}
+
+template &lt;typename T, typename I0&gt; static Result&lt;T&gt;
+run(T(*<span class="hljs-function"><span class="hljs-keyword">fun</span>)<span class="hljs-params">(I0)</span></span>, I0 a0)
+{
+    _functor1&lt;T, T(*)(I0), I0&gt; f(<span class="hljs-function"><span class="hljs-keyword">fun</span>, a0);</span>
+    <span class="hljs-keyword">return</span> Result&lt;T&gt;(_start&lt;T&gt;(f));
+}
+
+template &lt;typename T, typename C, typename I0&gt; static Result&lt;T&gt;
+run(C* c, T(C::*<span class="hljs-function"><span class="hljs-keyword">fun</span>)<span class="hljs-params">(I0)</span></span>, I0 a0)
+{
+    _class_functor1&lt;T, C, I0&gt; f(c, <span class="hljs-function"><span class="hljs-keyword">fun</span>, a0);</span>
+    <span class="hljs-keyword">return</span> Result&lt;T&gt;(_start&lt;T&gt;(f));
+}
+</code></pre><p>Returning <code>Result</code> object is assigned a <code>_thread</code> object, created by <code>_start</code> helper function in <code>Thread</code> class.</p><pre><code>template &lt;typename <span class="hljs-literal">T</span>, typename <span class="hljs-literal">F</span>&gt; static _thread&lt;<span class="hljs-literal">T</span>&gt;*
+_start(const <span class="hljs-literal">F</span>&amp; functor)
+{
+    _thread&lt;<span class="hljs-literal">T</span>&gt;* mythread = new _thread&lt;<span class="hljs-literal">T</span>&gt;();
+    _help_st&lt;<span class="hljs-literal">T</span>, <span class="hljs-literal">F</span> &gt;* h2 = new _help_st&lt;<span class="hljs-literal">T</span>, <span class="hljs-literal">F</span>&gt;(mythread, functor);
+    mythread-&gt;start(_help_fn&lt;_help_st&lt;<span class="hljs-literal">T</span>, <span class="hljs-literal">F</span>&gt; &gt;, h2);
+    <span class="hljs-keyword">return</span> mythread;
+}
+</code></pre><p>I hope you enjoyed this post serie… If you have question or you need some clarification, just leave a comment. I will be happy to answer or rewrite the unclear part</p><p><em>– 29/12/2011</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

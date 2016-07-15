@@ -1,0 +1,31 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Writing a commit hook for git"><title>Pre-commit Hook</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="pre-commit-hook">Pre-commit Hook</h1><p>The project on which I’m working has acquired some young people recently.</p><p>For a couple of them it’s even their first working experience so I’m really trying to transmit them the importance of conventions and an uniform coding style.</p><p>It’s usual (and perfectly normal) to find some coding style mistakes in their commits. So, to help us happily code all together, I created a small pre-commit hook to put in our repositories.</p><p>Right now it’s just a simple no-tabs check, but with some small changes it could check for use of deprecated functions or some forgotten <code>import pdb; pdb.set_trace()</code> :)</p><pre><code><span class="hljs-comment"># Files extensions in hooks.notabs are separated by "|"</span>
+<span class="hljs-comment"># Eg:</span>
+<span class="hljs-comment">#   git config hooks.notabs py|js</span>
+
+<span class="hljs-built_in">exec</span> 1&gt;&amp;2
+notabs=$(git config hooks.notabs)
+toplevel=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">"`git rev-parse --show-toplevel`/"</span> | sed <span class="hljs-_">-e</span> <span class="hljs-string">'s/[\/&amp;]/\\&amp;/g'</span>)
+<span class="hljs-keyword">if</span> [ -n <span class="hljs-string">"<span class="hljs-variable">$notabs</span>"</span> ] &amp;&amp; 
+    git diff --cached -- not_a_file `git diff --cached --name-only |
+      egrep <span class="hljs-string">'\.('</span><span class="hljs-variable">$notabs</span><span class="hljs-string">')$'</span> |
+      sed <span class="hljs-string">'s/^/'</span><span class="hljs-variable">$toplevel</span><span class="hljs-string">'/g'</span> | xargs` |
+      egrep -qn $<span class="hljs-string">'^\+\.*\t'</span>
+<span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Error: Attempt to add TABS"</span>
+    <span class="hljs-built_in">echo</span> 
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Do you really want to break our beautiful coding conventions? :("</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Remove all tabs characters and stage again your changes."</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"To override this hook use:"</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"  git commit --no-verify"</span>
+    <span class="hljs-built_in">echo</span>
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</code></pre><p>To have it working:</p><p>copy this script into <code>repository_dir/.git/hooks/pre-commit</code>. Add some file extensions to hooks.notabs variable (these must be separated by |). Done!</p><p>Let’s look at each parts in rigorous order of execution</p><ul><li><p><code>notabs=$(git config hooks.notabs)</code>: retrieves from local config the files extensions to check</p></li><li><p><code>git diff --cached --name-only</code>: lists names of files that have staged changes</p></li><li><p><code>egrep &#39;\.(&#39;$notabs&#39;)$&#39;</code>: removes files having different extensions from the ones in notabs</p></li><li><p><code>sed &#39;s/^/&#39;$toplevel&#39;/g&#39;</code>: prepend the absoulute path to each filename</p></li><li><p><code>xargs</code>: creates a list of arguments using previous file names list</p></li><li><p><code>git diff --cached -- not_a_file</code>: returns staged changes for files coming from “xargs”. Note that “not_a_file” is an unexistant file, specified in case that the output of xargs is empty. In fact if no files are specified the “git diff –cached” command would return staged changes for every file.</p></li><li><p><code>egrep -qn &#39;^\+\.*\t&#39;</code>: searches for all the lines starting with “+” and containing a tab</p></li></ul><p>Note that this pre-commit hook can be easily bypassed using.</p><p><code>git commit --no-verify</code></p><p>This reflects exactly the same thought I want communicate to my collegues. Everyone should struggle to pass the pre-commit hook checks, but no one should be forced to.</p><p>References:</p><ol><li><a href="http://git-scm.com/book/en/Customizing-Git-Git-Hooks">Customizing-Git-Git-Hooks</a></li></ol><p><em>– 13/08/2013</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

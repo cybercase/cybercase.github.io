@@ -1,0 +1,110 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Template Sorting in C++"><title>Sorting Priorities</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="sorting-priorities">Sorting Priorities</h1><p>Let’s say you have your 3d colored point type:</p><pre><code>struct MyPoint
+{
+    <span class="hljs-comment">// A 3d colored point</span>
+    MyPoint(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y, <span class="hljs-keyword">int</span> d) :
+             color(c), x(x), y(y), d(d) {}
+    <span class="hljs-keyword">int</span> color;
+    <span class="hljs-keyword">int</span> x;
+    <span class="hljs-keyword">int</span> y;
+    <span class="hljs-keyword">int</span> d;
+};
+</code></pre><p>You define a vector of <code>MyPoint</code> objects carefully ordered by color, depth, height and width.</p><pre><code><span class="hljs-keyword">int</span> <span class="hljs-built_in">width</span> = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">int</span> <span class="hljs-built_in">height</span> = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">int</span> depth = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">int</span> colors = <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">int</span> len = <span class="hljs-built_in">width</span> * <span class="hljs-built_in">height</span> * colors * depth;
+std::vector&lt;MyPoint&gt; pts;
+pts.reserve(len);
+
+<span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> c=<span class="hljs-number">0</span>; c&lt;colors; ++c)
+    <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> d=<span class="hljs-number">0</span>; d&lt;depth; ++d)
+        <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> y=<span class="hljs-number">0</span>; y&lt;<span class="hljs-built_in">height</span>; ++y)
+            <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> x=<span class="hljs-number">0</span>; x&lt;<span class="hljs-built_in">width</span>; ++x)
+                pts.push_back(MyPoint(c, x, y, d));
+</code></pre><p>Then one of your funny colleagues put a</p><pre><code>std::random_shuffle(pts.begin(), pts.end());
+</code></pre><p>just the line before you are scanning the ordered array of <code>MyPoint</code>… If it’s not a colleague, could be that you need to apply a transformation matrix to all of your points, or whatever else that will break the color, depth, height and width ordering of your set.</p><p>To order back your vector by the same priorities, you can use the STL sort algorithm with some custom comparison function. The the first function I wrote was this:</p><pre><code>bool mypoint_all_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const </span>MyPoint&amp; p1)
+{
+   <span class="hljs-built_in"> if </span>(p0.color &lt; p1.color)
+       <span class="hljs-built_in"> return </span>true;
+    else<span class="hljs-built_in"> if </span>(p0.color == p1.color)
+       <span class="hljs-built_in"> if </span>(p0.d &lt; p1.d)
+           <span class="hljs-built_in"> return </span>true;
+        else<span class="hljs-built_in"> if </span>(p0.d == p1.d)
+           <span class="hljs-built_in"> if </span>(p0.y &lt; p1.y)
+               <span class="hljs-built_in"> return </span>true;
+            else<span class="hljs-built_in"> if </span>(p0.y == p1.y)
+               <span class="hljs-built_in"> if </span>(p0.x &lt; p1.x)
+                   <span class="hljs-built_in"> return </span>true;
+   <span class="hljs-built_in"> return </span>false;
+}
+</code></pre><p>and then <code>std::sort(pts.begin(), pts.end(), mypoint_all_sort_fn);</code></p><p>I found this solution the ugliest among the others. It’s not scalable, has too many indentations and strong code dependancy… And also if <code>mypoint_all_sort_fn</code> was defined as operator inside <code>MyStruct</code> declaration I wouldn’t like to have such a function inside my software.</p><p>The second solution I came to was using several <code>stable_sort</code></p><pre><code>bool mypoint_x_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const </span>MyPoint&amp; p1)
+{
+   <span class="hljs-built_in"> return </span>p0.x &lt; p1.x;
+}
+bool mypoint_y_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const </span>MyPoint&amp; p1)
+{
+   <span class="hljs-built_in"> return </span>p0.y &lt; p1.y;
+}
+bool mypoint_d_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const </span>MyPoint&amp; p1)
+{
+   <span class="hljs-built_in"> return </span>p0.d &lt; p1.d;
+}
+bool mypoint_c_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const </span>MyPoint&amp; p1)
+{
+   <span class="hljs-built_in"> return </span>p0.color &lt; p1.color;
+}
+</code></pre><p>and then</p><pre><code>std::stable_sort(pts.begin(), pts.end(), mypoint_x_sort_fn);
+std::stable_sort(pts.begin(), pts.end(), mypoint_y_sort_fn);
+std::stable_sort(pts.begin(), pts.end(), mypoint_d_sort_fn);
+std::stable_sort(pts.begin(), pts.end(), mypoint_c_sort_fn);
+</code></pre><p>I found this solution not too bad by the code style point of view, but it’s not the same about performances. More are the values you want to sort by, more are the stable_sort steps you have to do.</p><p>The last solution, which I found the most fascinating one, was suggested to me by two of my collegues, and it took me a just a small bunch of time to write the code down.</p><pre><code><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">element</span><span class="hljs-params">(<span class="hljs-keyword">const</span> T&amp;, <span class="hljs-keyword">int</span> i)</span></span>;
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">int</span> I&gt; <span class="hljs-keyword">struct</span> Orderer
+{
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">bool</span> <span class="hljs-title">compare</span><span class="hljs-params">(<span class="hljs-keyword">const</span> T&amp; t0, <span class="hljs-keyword">const</span> T&amp; t1)</span>
+    </span>{
+        <span class="hljs-keyword">if</span> (element(t0, I) == element(t1, I))
+            <span class="hljs-keyword">return</span> Orderer&lt;T, I<span class="hljs-number">-1</span>&gt;::compare(t0, t1);
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-keyword">return</span> element(t0, I) &lt; element(t1, I);
+    }
+};
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-keyword">struct</span> Orderer&lt;T, <span class="hljs-number">-1</span>&gt;
+{
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">bool</span> <span class="hljs-title">compare</span><span class="hljs-params">(<span class="hljs-keyword">const</span> T&amp; t0, <span class="hljs-keyword">const</span> T&amp; t1)</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+};
+</code></pre><p>Using templates it’s possible to make the compiler generate the ugly if-else code. Then the task of providing the right element for the sorting is demanded to an element(int) function. Also, it’s possible substitute the element(int) function with an element(int) member function (or maybe an operator) in <code>MyPoint</code> definition. This is how it work:</p><pre><code><span class="hljs-keyword">template</span> &lt;&gt; <span class="hljs-keyword">int</span> element&lt;MyPoint&gt;(<span class="hljs-keyword">const</span> MyPoint&amp; p, <span class="hljs-keyword">int</span> i)
+{
+    <span class="hljs-comment">// Watch out!</span>
+    <span class="hljs-comment">// The higher is the i-value, the most significant is the member</span>
+    <span class="hljs-keyword">switch</span>(i)
+    {
+        <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
+            <span class="hljs-keyword">return</span> p.color;
+        <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:
+            <span class="hljs-keyword">return</span> p.d;
+        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
+            <span class="hljs-keyword">return</span> p.y;
+        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">return</span> p.x;
+        <span class="hljs-keyword">default</span>:
+            <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::invalid_argument(<span class="hljs-string">"Undefined element"</span>);
+    }
+}
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">mypoint_sort</span><span class="hljs-params">(<span class="hljs-keyword">const</span> MyPoint&amp; t0, <span class="hljs-keyword">const</span> MyPoint&amp; t1)</span>
+</span>{
+    <span class="hljs-keyword">return</span> Orderer&lt;MyPoint, <span class="hljs-number">3</span>&gt;::compare(t0, t1);
+}
+</code></pre><p>and then <code>std::sort(pts.begin(), pts.end(), mypoint_sort);</code></p><p>That’s it! A more readable switch-case statement provides the priority of sorting…. and the <code>mypoint_sort</code> function call the template right specialization of Orderer Struct static compare function.</p><p>Here how you can find, compile and run the code for this example:</p><pre><code>git <span class="hljs-keyword">clone</span> <span class="hljs-title">git</span>://github.com/cybercase/funproject.git
+cd funproject/other
+g++ order.cpp -o <span class="hljs-keyword">order</span> <span class="hljs-title">-Wall</span>
+</code></pre><p>One interesting thing I discovered while writing the code of this example, is that you can’t use template function specialization. I found a discussion about this topic at <a href="http://www.gotw.ca/publications/mill17.htm">http://www.gotw.ca/publications/mill17.htm</a>. The Peter Dimov and Dave Abrahams example shows why template specialization can’t be done with functions.</p><p><em>– 15/01/2012</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>

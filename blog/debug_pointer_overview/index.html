@@ -1,0 +1,36 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="C++ Smart Pointer for Debugging - Design Decisions"><title>Debug Pointer: a quick overview</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="debug-pointer-a-quick-overview">Debug Pointer: a quick overview</h1><p>Let’s focus on some keypoints of my debug_ptr:</p><ul><li><p>What a debug_ptr is used for? A debug_ptr can be used like a standard pointer type to hold the address of a dynamically allocated object: <code>typedef_pointer(int*, int_p); int_p p = new int(0);</code></p></li><li><p>How could it be useful? If you forget to delete a dynamically allocated object before loosing its last reference, you are probably creating a memory leak. A debug_ptr warns you about this fact using a warning policy.</p></li></ul><pre><code><span class="hljs-keyword">struct</span> ThrowPolicy {
+    ThrowPolicy() {
+        <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(<span class="hljs-string">"lost reference to undeleted object"</span>);
+    }
+};
+<span class="hljs-keyword">struct</span> PrintPolicy {
+    PrintPolicy() {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cerr</span> &lt;&lt; <span class="hljs-string">"WARNING: lost reference "</span>
+                        <span class="hljs-string">"to undeleted object"</span> &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    }
+};
+</code></pre><ul><li><p>How much does it cost? (in performance terms) The features of debug_ptr are mostly useful in “debug mode”. In a production release, you may not want use the features of a debug_ptr class (although you can), because of the performance losses due to the reference counting.</p></li><li><p>How did I address this issue? You can compile your software by defining ENABLE_DEBUG_TYPES to get the debug_ptr feature turned on. Otherwise all the debug_ptr features are turned off by a macro that will substitute any occurrence of debug_ptr<t>with a T*. This will avoid any overhead at compile and run time.</t></p></li></ul><pre><code>#ifndef ENABLE_DEBUG_TYPES
+#define typedef_pointer(<span class="hljs-keyword">Type</span>, Alias, <span class="hljs-attr">...</span>) typedef <span class="hljs-keyword">Type</span> Alias
+#define typedef_array(<span class="hljs-keyword">Type</span>, Alias, <span class="hljs-attr">...</span>) typedef <span class="hljs-keyword">Type</span> Alias
+#else <span class="hljs-comment">// ENABLE_DEBUG_TYPES</span>
+<span class="hljs-attr">...</span>
+#endif
+</code></pre><ul><li>How debug_ptr syntax differs by the one of a standard pointer type? debug_ptr it’s intended to be used just like any other smart_ptr, and in most of the cases you should not notice any difference in creating, copying, dereferencing, assigning, and deleting…</li></ul><pre><code>typedef_pointer(<span class="hljs-keyword">int</span>*, int_p);
+int_p p = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>(<span class="hljs-number">0</span>);
+int_p p_other = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>(<span class="hljs-number">0</span>);
+*p = <span class="hljs-number">63</span>;
+int_p p_other = p;
+<span class="hljs-keyword">delete</span> p_other;
+</code></pre><ul><li>How did you get the same delete syntax of a standard pointer type? By defining a default cast operator to a pointer-to-deleter-class. The cast operator will be implicitly called and a new deleter object returns to operator delete. So, delete operator, deletes the deleter-class.</li></ul><pre><code><span class="hljs-keyword">operator</span> deleter*() <span class="hljs-keyword">const</span> {
+    <span class="hljs-keyword">return</span> deleter::new_deleter(pd_);
+}
+</code></pre><p>And that’s all folks!</p><p>If you have any question, just leave a comment. If you like this project, or have any other ideas about what could be the next step of the debug_ptr, fork the project on github and have fun :)</p><pre><code>git <span class="hljs-built_in">clone</span> git://github.com/cybercase/debug_ptr.git <span class="hljs-comment"># clone the repo</span>
+<span class="hljs-built_in">cd</span> debug_ptr
+g++ -Wall -o <span class="hljs-built_in">test</span> debug_ptr_test.cc -DENABLE_DEBUG_TYPES
+./<span class="hljs-built_in">test</span>
+</code></pre><p><em>–01/09/2012</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>
