@@ -1,5 +1,5 @@
-<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Template Sorting in C++"><title>Sorting Priorities</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-b1396f0528.css"><link rel="stylesheet" href="/styles/main-aa5eee9981.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="sorting-priorities">Sorting Priorities</h1><p>Let’s say you have your 3d colored point type:</p><pre><code>struct MyPoint
-{
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Template Sorting in C++"><meta property="og:title" content="Sorting Priorities"><meta property="og:site_name" content="Stefano Brilli Home Page"><meta property="og:type" content="article"><meta property="og:locale" content="en_US"><link rel="canonical" href="http://examples.opengraphprotocol.us/article-utc.html"><meta property="og:url" content="http://examples.opengraphprotocol.us/article-utc.html"><meta property="article:author" content="Stefano Brilli"><title>Sorting Priorities</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-a3db57aa98.css"><link rel="stylesheet" href="/styles/main-7762a834ca.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="sorting-priorities">Sorting Priorities</h1><p>Let’s say you have your 3d colored point type:</p><pre><code><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyPoint</span>
+{</span>
     <span class="hljs-comment">// A 3d colored point</span>
     MyPoint(<span class="hljs-keyword">int</span> c, <span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y, <span class="hljs-keyword">int</span> d) :
              color(c), x(x), y(y), d(d) {}
@@ -22,7 +22,7 @@ pts.reserve(len);
         <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> y=<span class="hljs-number">0</span>; y&lt;<span class="hljs-built_in">height</span>; ++y)
             <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> x=<span class="hljs-number">0</span>; x&lt;<span class="hljs-built_in">width</span>; ++x)
                 pts.push_back(MyPoint(c, x, y, d));
-</code></pre><p>Then one of your funny colleagues put a</p><pre><code>std::random_shuffle(pts.begin(), pts.end());
+</code></pre><p>Then one of your funny colleagues put a</p><pre><code><span class="hljs-symbol">std:</span><span class="hljs-symbol">:random_shuffle</span>(pts.<span class="hljs-keyword">begin</span>(), pts.<span class="hljs-keyword">end</span>());
 </code></pre><p>just the line before you are scanning the ordered array of <code>MyPoint</code>… If it’s not a colleague, could be that you need to apply a transformation matrix to all of your points, or whatever else that will break the color, depth, height and width ordering of your set.</p><p>To order back your vector by the same priorities, you can use the STL sort algorithm with some custom comparison function. The the first function I wrote was this:</p><pre><code>bool mypoint_all_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const </span>MyPoint&amp; p1)
 {
    <span class="hljs-built_in"> if </span>(p0.color &lt; p1.color)
@@ -54,14 +54,14 @@ bool mypoint_c_sort_fn(const MyPoint&amp; p0,<span class="hljs-built_in"> const 
 {
    <span class="hljs-built_in"> return </span>p0.color &lt; p1.color;
 }
-</code></pre><p>and then</p><pre><code>std::stable_sort(pts.begin(), pts.end(), mypoint_x_sort_fn);
-std::stable_sort(pts.begin(), pts.end(), mypoint_y_sort_fn);
-std::stable_sort(pts.begin(), pts.end(), mypoint_d_sort_fn);
-std::stable_sort(pts.begin(), pts.end(), mypoint_c_sort_fn);
+</code></pre><p>and then</p><pre><code><span class="hljs-symbol">std:</span><span class="hljs-symbol">:stable_sort</span>(pts.<span class="hljs-keyword">begin</span>(), pts.<span class="hljs-keyword">end</span>(), mypoint_x_sort_fn);
+<span class="hljs-symbol">std:</span><span class="hljs-symbol">:stable_sort</span>(pts.<span class="hljs-keyword">begin</span>(), pts.<span class="hljs-keyword">end</span>(), mypoint_y_sort_fn);
+<span class="hljs-symbol">std:</span><span class="hljs-symbol">:stable_sort</span>(pts.<span class="hljs-keyword">begin</span>(), pts.<span class="hljs-keyword">end</span>(), mypoint_d_sort_fn);
+<span class="hljs-symbol">std:</span><span class="hljs-symbol">:stable_sort</span>(pts.<span class="hljs-keyword">begin</span>(), pts.<span class="hljs-keyword">end</span>(), mypoint_c_sort_fn);
 </code></pre><p>I found this solution not too bad by the code style point of view, but it’s not the same about performances. More are the values you want to sort by, more are the stable_sort steps you have to do.</p><p>The last solution, which I found the most fascinating one, was suggested to me by two of my collegues, and it took me a just a small bunch of time to write the code down.</p><pre><code><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">element</span><span class="hljs-params">(<span class="hljs-keyword">const</span> T&amp;, <span class="hljs-keyword">int</span> i)</span></span>;
 
-<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">int</span> I&gt; <span class="hljs-keyword">struct</span> Orderer
-{
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">int</span> I&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Orderer</span>
+{</span>
     <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">bool</span> <span class="hljs-title">compare</span><span class="hljs-params">(<span class="hljs-keyword">const</span> T&amp; t0, <span class="hljs-keyword">const</span> T&amp; t1)</span>
     </span>{
         <span class="hljs-keyword">if</span> (element(t0, I) == element(t1, I))
@@ -70,8 +70,8 @@ std::stable_sort(pts.begin(), pts.end(), mypoint_c_sort_fn);
             <span class="hljs-keyword">return</span> element(t0, I) &lt; element(t1, I);
     }
 };
-<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-keyword">struct</span> Orderer&lt;T, <span class="hljs-number">-1</span>&gt;
-{
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Orderer</span>&lt;T, -1&gt;
+{</span>
     <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">bool</span> <span class="hljs-title">compare</span><span class="hljs-params">(<span class="hljs-keyword">const</span> T&amp; t0, <span class="hljs-keyword">const</span> T&amp; t1)</span>
     </span>{
         <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
@@ -107,4 +107,4 @@ g++ order.cpp -o <span class="hljs-keyword">order</span> <span class="hljs-title
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
       e.src='https://www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-16d4bd2210.js"></script><script src="/scripts/main-8ccd39a4e8.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>
+      ga('create','UA-60498490-1');ga('send','pageview');</script><script src="/scripts/vendor-4637e41d8f.js"></script><script src="/scripts/main-398d21b2c9.js"></script><script>hljs.initHighlightingOnLoad();</script></body></html>
