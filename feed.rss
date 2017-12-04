@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>Stefano Brilli Home Page</title>
+  <link>http://stefano.brilli.me</link>
+  <description>News from Stefano Brilli</description>
+
+  <item>
+    <title>Keyboard Shortcuts and Layouts in the Browser</title>
+    <guid>http://stefano.brilli.me/blog/javascript_keyboard_shortcuts_in_the_browser/index.html</guid>
+    <link>http://stefano.brilli.me/blog/javascript_keyboard_shortcuts_in_the_browser/index.html</link>
+    <description>Handling Javascript Keyboard Shortcuts in the Browser</description>
+    <category>Blogpost</category>
+    <pubDate>Mon, 22 May 2017 15:00:00 +0200</pubDate>
+  </item>
+
+</channel>
+
+</rss>

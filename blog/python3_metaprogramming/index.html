@@ -1,4 +1,4 @@
-<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Experimenting with Python 3 Metaprogramming"><meta property="og:title" content="Python 3 Metaprogramming"><meta property="og:site_name" content="Stefano Brilli Home Page"><meta property="og:type" content="article"><meta property="og:locale" content="en_US"><link rel="canonical" href="http://examples.opengraphprotocol.us/article-utc.html"><meta property="og:url" content="http://examples.opengraphprotocol.us/article-utc.html"><meta property="article:author" content="Stefano Brilli"><title>Python 3 Metaprogramming</title><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-a3db57aa98.css"><link rel="stylesheet" href="/styles/main-2ffba05c75.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Writings</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="python-3-metaprogramming">Python 3 Metaprogramming</h1><p>How can you import XML files into Python 3? And why you would? … This blogpost doesn’t answer this last question, but it’s definetly going to answer the first one :)</p><p>Everything I’m writing is taken from this talk from David Beazley: <a href="https://www.youtube.com/watch?v=sPiWg5jSoZI">youtube video</a>. Consider this post as a very little summary of its contents.</p><p>Let’s start with the requirements: Python 3.3 … that’s all!</p><p>And let’s see what you’re getting:</p><p>If you define a file structures.xml like this</p><pre><code><span class="hljs-tag">&lt;<span class="hljs-name">structures</span>&gt;</span>
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Experimenting with Python 3 Metaprogramming"><meta property="og:title" content="Python 3 Metaprogramming"><meta property="og:site_name" content="Stefano Brilli Home Page"><meta property="og:type" content="article"><meta property="og:locale" content="en_US"><link rel="canonical" href="http://examples.opengraphprotocol.us/article-utc.html"><meta property="og:url" content="http://examples.opengraphprotocol.us/article-utc.html"><meta property="article:author" content="Stefano Brilli"><title>Python 3 Metaprogramming</title><link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,300,900" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700" rel="stylesheet" type="text/css"><link rel="stylesheet" href="/styles/vendor-a3db57aa98.css"><link rel="stylesheet" href="/styles/main-4e01a9e592.css"></head><body><div class="container"><header class="header"><nav class="header-links"><div class="header-links-rss"><a href="/feed.rss" rel="alternate" type="application/rss+xml"><i class="fa fa-rss"></i></a></div><div class="header-links-home"><a href="/">Home</a></div><div class="header-links-articles"><a href="/blog">Blog</a></div></nav></header><article class="content blog-article" lang="en"><h1 id="python-3-metaprogramming">Python 3 Metaprogramming</h1><p>How can you import XML files into Python 3? And why you would? … This blogpost doesn’t answer this last question, but it’s definetly going to answer the first one :)</p><p>Everything I’m writing is taken from this talk from David Beazley: <a href="https://www.youtube.com/watch?v=sPiWg5jSoZI">youtube video</a>. Consider this post as a very little summary of its contents.</p><p>Let’s start with the requirements: Python 3.3 … that’s all!</p><p>And let’s see what you’re getting:</p><p>If you define a file structures.xml like this</p><pre><code><span class="hljs-tag">&lt;<span class="hljs-name">structures</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">structure</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"Stock"</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">field</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"SizedString"</span> <span class="hljs-attr">maxlen</span>=<span class="hljs-string">"4"</span>&gt;</span>name<span class="hljs-tag">&lt;/<span class="hljs-name">field</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">field</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"PosInteger"</span>&gt;</span>shares<span class="hljs-tag">&lt;/<span class="hljs-name">field</span>&gt;</span>
@@ -108,15 +108,15 @@ To handle different descriptors, David uses a descriptors hierarchy like the <sp
             clsdict[<span class="hljs-built_in">name</span>].<span class="hljs-built_in">name</span> = <span class="hljs-built_in">name</span>
         clsobj = super().<span class="hljs-variable">__new__</span>(cls, <span class="hljs-built_in">name</span>, bases, clsdict)
         return clsobj
-</code></pre><p>The Stock class definition now becomes</p><pre><code>class Stock(<span class="hljs-attr">metaclass=StructMeta):</span>
-    <span class="hljs-attr">name</span> = SizedString(<span class="hljs-attr">maxlen=4)</span>
-    <span class="hljs-attr">shares</span> = PosInteger()
-    <span class="hljs-attr">price</span> = PosFloat()
+</code></pre><p>The Stock class definition now becomes</p><pre><code>class Stock(<span class="hljs-attribute">metaclass</span>=StructMeta):
+    name = SizedString(<span class="hljs-attribute">maxlen</span>=4)
+   <span class="hljs-built_in"> shares </span>= PosInteger()
+    price = PosFloat()
 
     def __init__(self, name, shares, price):
-        self.<span class="hljs-attr">name</span> = name
-        self.<span class="hljs-attr">shares</span> = shares
-        self.<span class="hljs-attr">price</span> = price
+        self.name = name
+        self.shares =<span class="hljs-built_in"> shares
+</span>        self.price = price
 </code></pre><p>There is still another “problem” that David try to solve: the code repetition inside the <strong>init</strong> method. To address this problem, he changes the previous metaclass as follows. from collections import OrderedDict</p><pre><code><span class="hljs-keyword">class</span> StructMeta(<span class="hljs-keyword">type</span>):
     @staticmethod
     def __prepare__(cls, name, bases=None):
@@ -141,17 +141,17 @@ To handle different descriptors, David uses a descriptors hierarchy like the <sp
 
         clsobj = super().__new__(cls, name, bases, dict(clsdict))
         return clsobj
-</code></pre><p>And the Stock class becomes</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Stock</span>(<span class="hljs-title">metaclass</span>=<span class="hljs-type">StructMeta</span>):
-    name = <span class="hljs-type">SizedString</span>(<span class="hljs-title">maxlen</span>=4)
-    shares = <span class="hljs-type">PosInteger</span>()
-    price = <span class="hljs-type">PosFloat</span>()</span>
-</code></pre><p>At this point it’s convenient introduce a Structure base class:</p><pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Structure</span>(<span class="hljs-title">metaclass</span>=<span class="hljs-type">StructMeta</span>):
+</code></pre><p>And the Stock class becomes</p><pre><code>class Stock(<span class="hljs-attribute">metaclass</span>=StructMeta):
+    name = SizedString(<span class="hljs-attribute">maxlen</span>=4)
+   <span class="hljs-built_in"> shares </span>= PosInteger()
+    price = PosFloat()
+</code></pre><p>At this point it’s convenient introduce a Structure base class:</p><pre><code>class Structure(<span class="hljs-attribute">metaclass</span>=StructMeta):
     pass
 
-<span class="hljs-keyword">class</span> <span class="hljs-type">Stock</span>(<span class="hljs-type">Structure</span>):
-    name = <span class="hljs-type">SizedString</span>(<span class="hljs-title">maxlen</span>=4)
-    shares = <span class="hljs-type">PosInteger</span>()
-    price = <span class="hljs-type">PosFloat</span>()</span>
+class Stock(Structure):
+    name = SizedString(<span class="hljs-attribute">maxlen</span>=4)
+   <span class="hljs-built_in"> shares </span>= PosInteger()
+    price = PosFloat()
 </code></pre><p>And finally we get to the XML part :) The first goal is to generate the python code from the XML file. To achieve this the David use these functions:</p><pre><code><span class="hljs-keyword">from</span> xml.etree.ElementTree <span class="hljs-keyword">import</span> parse
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_xml_to_code</span><span class="hljs-params">(filename)</span>:</span>
     doc = parse(filename)
@@ -171,11 +171,11 @@ To handle different descriptors, David uses a descriptors hierarchy like the <sp
                             <span class="hljs-keyword">if</span> key != <span class="hljs-string">'type'</span>)
         code += <span class="hljs-string">'    %s = %s(%s)\n'</span> % (name, dtype, kwargs)
     <span class="hljs-keyword">return</span> code
-</code></pre><p>And the result of parsing the structure.xml file (defined at the beginning of the blogpost) is:</p><pre><code>&gt;&gt;&gt; print(_xml_to_code(<span class="hljs-string">"structures.xml"</span>))
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Stock</span>(<span class="hljs-type">Structure</span>):
-    name = <span class="hljs-type">SizedString</span>(<span class="hljs-title">maxlen</span>=4)
-    shares = <span class="hljs-type">PosInteger</span>()
-    price = <span class="hljs-type">PosFloat</span>()</span>
+</code></pre><p>And the result of parsing the structure.xml file (defined at the beginning of the blogpost) is:</p><pre><code>&gt;&gt;&gt; <span class="hljs-builtin-name">print</span>(_xml_to_code(<span class="hljs-string">"structures.xml"</span>))
+class Stock(Structure):
+    name = SizedString(<span class="hljs-attribute">maxlen</span>=4)
+   <span class="hljs-built_in"> shares </span>= PosInteger()
+    price = PosFloat()
 </code></pre><p>The final step consists in hooking to the python import system. Full details about the new Import Hooks feature of Python3.3 are found at [PEP-302]. We begin defining a new importer class to append at sys.meta_path</p><pre><code><span class="hljs-keyword">import</span> os
 class StructImporter:
     def __init__(self, <span class="hljs-built_in">path</span>):
@@ -215,7 +215,7 @@ And finally here we <span class="hljs-symbol">are:</span>
 Python3.<span class="hljs-number">3</span> -i xmlimport.py
 <span class="hljs-meta">&gt;&gt;</span>&gt; from structures import *
 &gt;&gt;&gt; s = Stock(<span class="hljs-string">"GOOG"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1.0</span>)
-</code></pre><p>You can find the final version of the xmlimporter.py and structures.xml under the folder</p><p><code>python_metaprogramming</code> in my git repository at:</p><p><code>git://github.com/cybercase/funproject.git</code></p><p>If you got 3 hours to spend, and a lot of love for this metaprogramming stuff, I really suggest to watch the entire video from David Beazley. Also, I apologize in advance for any error in this blogpost.</p><p><em>– 22/05/2013</em></p></article><footer class="footer"><div>© 2016 Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+</code></pre><p>You can find the final version of the xmlimporter.py and structures.xml under the folder</p><p><code>python_metaprogramming</code> in my git repository at:</p><p><code>git://github.com/cybercase/funproject.git</code></p><p>If you got 3 hours to spend, and a lot of love for this metaprogramming stuff, I really suggest to watch the entire video from David Beazley. Also, I apologize in advance for any error in this blogpost.</p><p><em>– 22/05/2013</em></p></article><footer class="footer"><div>© Stefano Brilli. All Rights Reserved.</div><div><a id="toggle-grid" href="#">toggle grid</a></div></footer></div><!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
       e.src='https://www.google-analytics.com/analytics.js';
