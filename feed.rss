@@ -7,6 +7,15 @@
   <description>News from Stefano Brilli</description>
 
   <item>
+    <title>Mutant - a GraphQL Explorer App for macOS</title>
+    <guid>http://stefano.brilli.me/blog/mutant-graphql-app-macos/index.html</guid>
+    <link>http://stefano.brilli.me/blog/mutant-graphql-app-macos/index.html</link>
+    <description>GraphQL API Explorer based on GraphiQL</description>
+    <category>Blogpost</category>
+    <pubDate>Tue, 26 Dec 2017 12:00:00 +0200</pubDate>
+  </item>
+
+  <item>
     <title>Keyboard Shortcuts and Layouts in the Browser</title>
     <guid>http://stefano.brilli.me/blog/javascript_keyboard_shortcuts_in_the_browser/index.html</guid>
     <link>http://stefano.brilli.me/blog/javascript_keyboard_shortcuts_in_the_browser/index.html</link>
