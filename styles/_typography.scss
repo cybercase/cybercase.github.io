@@ -1,0 +1,36 @@
+@mixin lines() {
+    @for $i from 1 through 42 {
+        .line-#{$i}-d {
+            @include desktop {
+                height: calc(var(--magic-1) * $i);
+            }
+        }
+
+        .line-#{$i}-m {
+            @include mobile {
+                height: calc(var(--magic-1) * $i);
+            }
+        }
+
+        .mtop-#{$i}-d {
+            @include desktop {
+                margin-top: calc(var(--magic-1) * $i);
+            }
+        }
+
+        .mtop-#{$i}-m {
+            @include mobile {
+                margin-top: calc(var(--magic-1) * $i);
+            }
+        }
+    }
+}
+
+@include lines();
+
+.typography--debug {
+    background-image: linear-gradient(to bottom, hsla(200, 100%, 50%, .3) 1px, transparent 1px);
+    background-position: left top;
+    background-repeat: repeat;
+    background-size: var(--magic-1) var(--magic-1);
+}

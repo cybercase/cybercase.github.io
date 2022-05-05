@@ -1,0 +1,56 @@
+.cover {
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  background-position: center center;
+  background-size: cover;
+
+  height: calc(var(--magic-1) * 11);
+
+  &--tall {
+    @include desktop {
+      height: calc(var(--magic-1) * 16);
+    }
+    @include mobile {
+      height: calc(var(--magic-1) * 11);
+    }
+  }
+
+  &--dark {
+    &:before {
+      // dark gradient to improve nav readability
+      position: absolute;
+      content: " ";
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0 , rgba(0,0,0,0.2) var(--magic-2), rgba(0,0,0,0) var(--magic-4));
+    }
+  }
+
+  &-box {
+    bottom: var(--magic-1);
+    position: absolute;
+    left: off(1);
+    right: off(1);
+    color: var(--color-bg);
+    z-index: 1;
+    text-shadow: 0px 3px 21px black;
+
+    &-title {
+      font-weight: 900;
+      font-size: var(--font-ms-4);
+      line-height: var(--magic-2);
+      font-family: var(--font-sans);
+    }
+
+    &-subtitle {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: var(--font-ms-1);
+      line-height: var(--magic-1);
+      word-break: break-word;
+    }
+  }
+}

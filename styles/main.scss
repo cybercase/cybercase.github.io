@@ -1,0 +1,74 @@
+@import "reset";
+@import "variables";
+
+@import "breakpoints";
+@import "typography";
+@import "grid";
+
+@import "site-header";
+@import "cover";
+@import "content";
+@import "footer";
+@import "hljs";
+
+
+html {
+  box-sizing: border-box;
+  background-color: var(--color-fg);
+  font-family: var(--font-serif);
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @include mobile { font-size: 14px; }
+  @include desktop { font-size: 16px; }
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+code, kbd, pre, samp {
+
+}
+
+a {
+  text-decoration: none;
+  box-sizing: border-box;
+  // text-decoration: underline;
+  // text-decoration-style: dotted;
+  // // text-decoration-color: inherit;
+  // text-decoration-thickness: 1px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.hljs {
+  padding: calc(var(--magic-1) / 2) calc(var(--magic-1)/2);
+  margin-top: var(--magic-1);
+  font-family: var(--font-monospace);
+  line-height: var(--magic-1);
+  box-shadow: var(--item-shadow);
+  display: block;
+  overflow: overlay;
+}
+
+code {
+  font-size: var(--font-ms-1);
+  font-family: var(--font-monospace);
+  line-height: initial;
+  color: var(--color-h3);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  line-height: var(--magic-1);
+  overflow: overlay;
+}
+
+.text-center {
+  text-align: center;
+}

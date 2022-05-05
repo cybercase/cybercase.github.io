@@ -1,0 +1,21 @@
+.footer {
+  margin-top: calc(var(--magic-1) * 4);
+  padding-bottom: var(--magic-1);
+  text-align: center;
+  font-size: var(--font-ms-0);
+  font-family: var(--font-monospace);
+
+  &-contacts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--magic-1);
+    line-height: var(--magic-1);
+
+    & > a {
+      display: flex;
+      color: inherit;
+      margin: var(--magic--1)
+    }
+  }
+}

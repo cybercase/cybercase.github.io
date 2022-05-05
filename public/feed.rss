@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Stefano Brilli</title>
+        <link>https://stefano.brilli.me</link>
+        <description>Articles by Stefano Brilli</description>
+        <lastBuildDate>Thu, 05 May 2022 20:44:02 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>.</generator>
+        <language>en</language>
+        <copyright>Stefano Brilli</copyright>
+        <item>
+            <title><![CDATA[The Web MiniDisc Application - Use your old NetMD device in the browser]]></title>
+            <link>https://stefano.brilli.me/blog/web-minidisc</link>
+            <guid>web-minidisc</guid>
+            <pubDate>Thu, 26 Mar 2020 05:35:07 GMT</pubDate>
+            <description><![CDATA[Get control of your MiniDisc device thanks to WebUSB and WASM]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Mutant - a GraphQL Explorer App for macOS]]></title>
+            <link>https://stefano.brilli.me/blog/mutant-graphql-app-macos</link>
+            <guid>mutant-graphql-app-macos</guid>
+            <pubDate>Thu, 21 Dec 2017 00:00:01 GMT</pubDate>
+            <description><![CDATA[GraphQL API Explorer based on GraphiQL]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Keyboard Shortcuts and Layouts in the Browser]]></title>
+            <link>https://stefano.brilli.me/blog/javascript_keyboard_shortcuts_in_the_browser</link>
+            <guid>javascript_keyboard_shortcuts_in_the_browser</guid>
+            <pubDate>Mon, 22 May 2017 00:00:01 GMT</pubDate>
+            <description><![CDATA[Defining layout independent keyboard shortcuts in the browser]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[UP2 Reverse Engineering]]></title>
+            <link>https://stefano.brilli.me/blog/up2_reverse_engineering</link>
+            <guid>up2_reverse_engineering</guid>
+            <pubDate>Sat, 19 Sep 2015 00:00:01 GMT</pubDate>
+            <description><![CDATA[Jawbone UP2 vibration hack]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[UpNotifications for Jawbone UP24]]></title>
+            <link>https://stefano.brilli.me/blog/up24_notifications</link>
+            <guid>up24_notifications</guid>
+            <pubDate>Sat, 21 Mar 2015 00:00:00 GMT</pubDate>
+            <description><![CDATA[Jawbone up24 call notifications]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[UP24 Hacking]]></title>
+            <link>https://stefano.brilli.me/blog/up24_reverse_engineering</link>
+            <guid>up24_reverse_engineering</guid>
+            <pubDate>Sat, 11 Oct 2014 00:00:00 GMT</pubDate>
+            <description><![CDATA[Jawbone UP24 band vibration hack]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Pre-commit Hook - PEP8 Version]]></title>
+            <link>https://stefano.brilli.me/blog/pre_commit_hook_pep8</link>
+            <guid>pre_commit_hook_pep8</guid>
+            <pubDate>Sun, 15 Sep 2013 00:00:01 GMT</pubDate>
+            <description><![CDATA[Python PEP8 commit hook for git]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Pre-commit Hook]]></title>
+            <link>https://stefano.brilli.me/blog/pre_commit_hook</link>
+            <guid>pre_commit_hook</guid>
+            <pubDate>Tue, 13 Aug 2013 00:00:01 GMT</pubDate>
+            <description><![CDATA[Writing a commit hook for git]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Python 3 Metaprogramming]]></title>
+            <link>https://stefano.brilli.me/blog/python3_metaprogramming</link>
+            <guid>python3_metaprogramming</guid>
+            <pubDate>Wed, 22 May 2013 00:00:01 GMT</pubDate>
+            <description><![CDATA[Experimenting with Python 3 Metaprogramming]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Holidays and GPU]]></title>
+            <link>https://stefano.brilli.me/blog/holidays_and_gpu</link>
+            <guid>holidays_and_gpu</guid>
+            <pubDate>Tue, 25 Sep 2012 00:00:01 GMT</pubDate>
+            <description><![CDATA[Post about my GPU project before vacation]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[A GPU Exercise - part 2]]></title>
+            <link>https://stefano.brilli.me/blog/gpu_exercise2</link>
+            <guid>gpu_exercise2</guid>
+            <pubDate>Sun, 16 Sep 2012 00:00:01 GMT</pubDate>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[A GPU Exercise - part 1]]></title>
+            <link>https://stefano.brilli.me/blog/gpu_exercise</link>
+            <guid>gpu_exercise</guid>
+            <pubDate>Thu, 13 Sep 2012 00:00:01 GMT</pubDate>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Debug Pointer: a quick overview]]></title>
+            <link>https://stefano.brilli.me/blog/debug_pointer_overview</link>
+            <guid>debug_pointer_overview</guid>
+            <pubDate>Sat, 01 Sep 2012 00:00:01 GMT</pubDate>
+            <description><![CDATA[C++ Smart Pointer for Debugging - Design Decisions]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Debug Pointer]]></title>
+            <link>https://stefano.brilli.me/blog/debug_pointer</link>
+            <guid>debug_pointer</guid>
+            <pubDate>Wed, 22 Aug 2012 00:00:01 GMT</pubDate>
+            <description><![CDATA[C++ Smart Pointer for Debugging]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[The concept of minimum]]></title>
+            <link>https://stefano.brilli.me/blog/concept_of_minimum</link>
+            <guid>concept_of_minimum</guid>
+            <pubDate>Sat, 10 Mar 2012 00:00:01 GMT</pubDate>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Sorting Priorities]]></title>
+            <link>https://stefano.brilli.me/blog/sorting_priorities</link>
+            <guid>sorting_priorities</guid>
+            <pubDate>Sun, 15 Jan 2012 00:00:01 GMT</pubDate>
+            <description><![CDATA[Template Sorting in C++]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Inspiration Code - part 3]]></title>
+            <link>https://stefano.brilli.me/blog/inspiration_code3</link>
+            <guid>inspiration_code3</guid>
+            <pubDate>Thu, 29 Dec 2011 00:00:01 GMT</pubDate>
+            <description><![CDATA[Code I wrote after reading a book - third part]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Inspiration Code - part 2]]></title>
+            <link>https://stefano.brilli.me/blog/inspiration_code2</link>
+            <guid>inspiration_code2</guid>
+            <pubDate>Tue, 20 Dec 2011 00:00:01 GMT</pubDate>
+            <description><![CDATA[Code I wrote after reading a book - second part]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+        <item>
+            <title><![CDATA[Inspiration Code]]></title>
+            <link>https://stefano.brilli.me/blog/inspiration_code</link>
+            <guid>inspiration_code</guid>
+            <pubDate>Mon, 19 Dec 2011 00:00:01 GMT</pubDate>
+            <description><![CDATA[Code I wrote after reading a book]]></description>
+            <author>stefano@brilli.me (Stefano Brilli)</author>
+        </item>
+    </channel>
+</rss>

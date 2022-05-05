@@ -1,0 +1,59 @@
+:root {
+  --color-bg: #fafafa;
+  --color-fg: #333;
+  --color-h3: #777;
+  --color-link: #777;
+
+  --item-shadow: 0px 3px 12px 3px rgba(0, 0, 0, 0.35);
+
+  --font-serif: 'Merriweather', serif;
+  --font-sans: 'Roboto', sans-serif;
+  --font-monospace: 'Ubuntu Mono', monospace;
+  --font-base-size: 1rem;
+
+  /* font modular scale */
+  --font-ms-ratio: 1.3333;
+
+  --font-ms--1: calc(var(--font-ms-0) / var(--font-ms-ratio));
+  --font-ms-0: calc(var(--font-base-size) / var(--font-ms-ratio));
+  --font-ms-1: calc(var(--font-base-size));
+  --font-ms-2: calc(var(--font-ms-1) * var(--font-ms-ratio) );
+  --font-ms-3: calc(var(--font-ms-2) * var(--font-ms-ratio) );
+  --font-ms-4: calc(var(--font-ms-3) * var(--font-ms-ratio) );
+
+  --magic--1: calc(var(--font-ms-1) / 2);
+  --magic-0: calc(var(--font-ms-1));
+  --magic-1: calc(var(--font-ms-1) * 2);
+  --magic-2: calc(var(--font-ms-1) * 2 * 2);
+  --magic-4: calc(var(--font-ms-1) * 2 * 4);
+
+
+  /* grid */
+  --col-gutter: 3.5156%;
+  --col-width: 5.1107%;
+  --col-1: calc(var(--col-width) * 1 + var(--col-gutter) * 0);
+  --col-2: calc(var(--col-width) * 2 + var(--col-gutter) * 1);
+  --col-3: calc(var(--col-width) * 3 + var(--col-gutter) * 2);
+  --col-4: calc(var(--col-width) * 4 + var(--col-gutter) * 3);
+  --col-5: calc(var(--col-width) * 5 + var(--col-gutter) * 4);
+  --col-6: calc(var(--col-width) * 6 + var(--col-gutter) * 5);
+  --col-7: calc(var(--col-width) * 7 + var(--col-gutter) * 6);
+  --col-8: calc(var(--col-width) * 8 + var(--col-gutter) * 7);
+  --col-9: calc(var(--col-width) * 9 + var(--col-gutter) * 8);
+  --col-10: calc(var(--col-width) * 10 + var(--col-gutter) * 9);
+  --col-11: calc(var(--col-width) * 11 + var(--col-gutter) * 10);
+  --col-12: calc(var(--col-width) * 12 + var(--col-gutter) * 11);
+
+  --off-1: calc((var(--col-width) + var(--col-gutter)) * 1);
+  --off-2: calc((var(--col-width) + var(--col-gutter)) * 2);
+  --off-3: calc((var(--col-width) + var(--col-gutter)) * 3);
+  --off-4: calc((var(--col-width) + var(--col-gutter)) * 4);
+  --off-5: calc((var(--col-width) + var(--col-gutter)) * 5);
+  --off-6: calc((var(--col-width) + var(--col-gutter)) * 6);
+  --off-7: calc((var(--col-width) + var(--col-gutter)) * 7);
+  --off-8: calc((var(--col-width) + var(--col-gutter)) * 8);
+  --off-9: calc((var(--col-width) + var(--col-gutter)) * 9);
+  --off-10: calc((var(--col-width) + var(--col-gutter)) * 10);
+  --off-11: calc((var(--col-width) + var(--col-gutter)) * 11);
+  --off-12: calc((var(--col-width) + var(--col-gutter)) * 11);
+}

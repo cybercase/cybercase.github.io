@@ -1,0 +1,162 @@
+// Horizontal grid
+$col-count: 12;
+$col-space: 3.5156%; // 27px @ 768 * 11 col
+$col-width: 5.1107%; // 39.25px @ 768 * 12 col
+
+@function col($i) {
+    @return calc(#{$col-width * $i} + #{$col-space * ($i - 1) });
+}
+
+@function off($i) {
+    @return calc(#{$col-width * $i} + #{$col-space * $i});
+}
+
+@mixin grid-list($count) {
+
+    @for $i from 1 through $count {    
+        .col-#{$i}-d {
+            @include desktop {
+                float: left;
+                width: col($i);
+                margin-right: $col-space;
+            }
+        }
+
+        .col-#{$i}-m {
+            @include mobile {
+                float: left;
+                width: col($i);
+                margin-right: $col-space;
+            }
+        }
+
+        .break-d {
+            @include desktop {
+                margin-right: 0;
+            }
+        }
+
+        .break-m {
+            @include mobile {
+                margin-right: 0;
+            }
+        }
+
+        .offset-#{$i}-d {
+            @include desktop {
+                margin-left: off($i);
+            }
+        }
+
+        .offset-#{$i}-m {
+            @include mobile {
+                margin-left: off($i);
+            }
+        }    
+    }
+
+}
+
+@include grid-list($col-count);
+
+.row {
+    &:after {
+        content: ' ';
+        clear: left;
+        display: block;
+    }
+}
+
+
+.container {
+  margin: auto;
+
+  @include desktop { 
+    width: 768px;
+  }
+
+  @include mobile { 
+    width: 100%;
+  }
+}
+
+%inner-block {
+  margin-left: off(1);
+  margin-right: off(1);
+}
+
+.grid--debug {
+    .row > * {
+        background-color: rgba(0, 255, 0, 0.1);
+    }
+
+    .container {
+        background-image: linear-gradient(
+            to right,
+            hsla(200, 100%, 50%, .3) 0,
+    
+            hsla(200, 100%, 50%, .3) col(1),
+            transparent col(1),
+            transparent off(1),
+            hsla(200, 100%, 50%, .3) off(1),
+
+            hsla(200, 100%, 50%, .3) col(2),
+            transparent col(2),
+            transparent off(2),
+            hsla(200, 100%, 50%, .3) off(2),
+
+            hsla(200, 100%, 50%, .3) col(3),
+            transparent col(3),
+            transparent off(3),
+            hsla(200, 100%, 50%, .3) off(3),
+
+            hsla(200, 100%, 50%, .3) col(4),
+            transparent col(4),
+            transparent off(4),
+            hsla(200, 100%, 50%, .3) off(4),
+
+            hsla(200, 100%, 50%, .3) col(5),
+            transparent col(5),
+            transparent off(5),
+            hsla(200, 100%, 50%, .3) off(5),
+
+            hsla(200, 100%, 50%, .3) col(6),
+            transparent col(6),
+            transparent off(6),
+            hsla(200, 100%, 50%, .3) off(6),
+
+            hsla(200, 100%, 50%, .3) col(7),
+            transparent col(7),
+            transparent off(7),
+            hsla(200, 100%, 50%, .3) off(7),
+
+            hsla(200, 100%, 50%, .3) col(8),
+            transparent col(8),
+            transparent off(8),
+            hsla(200, 100%, 50%, .3) off(8),
+
+            hsla(200, 100%, 50%, .3) col(9),
+            transparent col(9),
+            transparent off(9),
+            hsla(200, 100%, 50%, .3) off(9),
+
+            hsla(200, 100%, 50%, .3) col(10),
+            transparent col(10),
+            transparent off(10),
+            hsla(200, 100%, 50%, .3) off(10),
+
+            hsla(200, 100%, 50%, .3) col(11),
+            transparent col(11),
+            transparent off(11),
+            hsla(200, 100%, 50%, .3) off(11),
+
+            hsla(200, 100%, 50%, .3) col(12),
+            transparent col(12),
+            transparent off(12),
+            hsla(200, 100%, 50%, .3) off(12)
+        );
+        background-position: left 0;
+        background-repeat: repeat;
+        background-size: calc(100%);  // wide as .row
+    }
+}
