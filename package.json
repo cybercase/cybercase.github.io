@@ -9,7 +9,7 @@
     "lint": "next lint",
     "export": "next build && next export",
     "prepare": "husky install",
-    "deploy": "npm run export && gh-pages -d out"
+    "deploy": "npm run export && gh-pages -d out --dotfiles"
   },
   "dependencies": {
     "@emotion/css": "^11.9.0",
@@ -51,6 +51,6 @@
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache",
-    "*.{js,css,md}": "prettier --check"
+    "*.{js,css,ts}": "prettier --check"
   }
 }

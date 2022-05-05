@@ -1,6 +1,7 @@
 import clsx from "classnames";
 import Link from "next/link";
 import { Cover } from "./cover";
+import { FaRss } from "react-icons/fa";
 
 export interface SiteHeaderProps {
   cover?: string;
@@ -27,7 +28,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({
     >
       <nav className="site-header-nav">
         <a href="/feed.rss" rel="alternate" type="application/rss+xml">
-          <i className="fa fa-rss"></i>
+          <FaRss size={20} />
         </a>
         <span></span>
         <Link href={"/"}>

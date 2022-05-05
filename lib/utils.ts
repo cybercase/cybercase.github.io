@@ -53,6 +53,7 @@ export const generateRSSFeed = (posts: PostType[]) => {
     language: "en",
     feedLinks: `${baseUrl}/rss.xml`,
     author,
+    updated: new Date(2022, 4, 6), // avoid changing the feed everytime it's built
   });
 
   // Add each article to the feed
