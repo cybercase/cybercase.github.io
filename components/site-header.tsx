@@ -31,12 +31,8 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({
           <FaRss size={20} />
         </a>
         <span></span>
-        <Link href={"/"}>
-          <a>Home</a>
-        </Link>
-        <Link href="/blog">
-          <a>Blog</a>
-        </Link>
+        <Link href={"/"}>Home</Link>
+        <Link href="/blog">Blog</Link>
       </nav>
 
       {cover ? (

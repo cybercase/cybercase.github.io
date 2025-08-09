@@ -45,7 +45,7 @@ const Blog: NextPageWithLayout<PostProps> = ({ allPosts }: PostProps) => {
                 return (
                   <li key={post.date}>
                     <Link href={`/blog/${post.slug}`}>
-                      <a>{post.coverTitle ?? post.title}</a>
+                      {post.coverTitle ?? post.title}
                     </Link>
                   </li>
                 );

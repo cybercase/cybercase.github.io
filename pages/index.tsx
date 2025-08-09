@@ -9,16 +9,22 @@ const Home: NextPageWithLayout = () => {
       <ul className="nostyle">
         <li>
           <h3>
-            <Link href="https://stefano.brilli.me/webminidisc">
-              <a className="projects-link">The Web MiniDisc Application</a>
+            <Link
+              href="https://stefano.brilli.me/webminidisc"
+              className="projects-link"
+            >
+              The Web MiniDisc Application
             </Link>
           </h3>
           Bringing back to life the MiniDisc with WebUSB and WASM.
         </li>
         <li>
           <h3>
-            <Link href="https://stefano.brilli.me/google-forms-html-exporter/">
-              <a className="projects-link">Google Forms HTML Exporter</a>
+            <Link
+              href="https://stefano.brilli.me/google-forms-html-exporter/"
+              className="projects-link"
+            >
+              Google Forms HTML Exporter
             </Link>
           </h3>
           Create and Style HTML Forms starting from any Google Form.
