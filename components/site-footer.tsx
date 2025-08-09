@@ -5,13 +5,6 @@ export const MyFooter: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer-contacts">
-        <a
-          href="https://twitter.com/thecybercase"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <FaTwitter size={iconSize} />
-        </a>
         <a href="https://github.com/cybercase" target="_blank" rel="noreferrer">
           <FaGithub size={iconSize} />
         </a>
