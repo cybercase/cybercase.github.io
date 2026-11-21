@@ -10,7 +10,7 @@ date: "2014-10-11T00:00:00.322Z"
 
 Last month I received a [Jawbone UP24](http://jawbone.com/store/buy/up24) as birthday gift, and after a couple of weeks of _standard use_ I couldn't resist digging into its technical side to discover how this device actually works.
 
-As far as I discovered, UP24 features a 3 axis accelerometer, 2 notification leds, a vibrating motor and a Bluetooth LE interface to communicate with the companion smartphone app "UP" (available for Android and iOS). Technical readers can find further info and a complete teardown of the _low-end_ version of UP24 (the older UP) [here](http://www.eevblog.com/forum/blog/eevblog-412-jawbone-up-pedometer-teardown/).
+As far as I discovered, UP24 features a 3 axis accelerometer, 2 notification leds, a vibrating motor and a Bluetooth LE interface to communicate with the companion smartphone app "UP" (available for Android and iOS). Technical readers can find further info and a complete teardown of the _low-end_ version of UP24 (the older UP) [here](https://www.eevblog.com/forum/blog/eevblog-412-jawbone-up-pedometer-teardown/).
 
 The strength of UP24 comes also from the great companion app that let users configure alarms and notifications in response of activities or events. Great features are the _smart alarm_ that chooses the best time to wake you up in the morning, and _idle notifications_ that reminds you to stretch your legs after being too much time idle on the chair.
 
@@ -24,7 +24,7 @@ I wanted to use my UP24 as a notification device for messages coming from some o
 
 So, as usual, the first question is
 
-> " has someone already solved my problem? "
+> "has someone already solved my problem?"
 
 Googling around I found [something here](http://www.plutinosoft.com/hacking-bluetooth-le/) and [here](https://forums.adafruit.com/viewtopic.php?f=8&t=51450).
 ... Perfect! Just no code available, and wrong OS :)

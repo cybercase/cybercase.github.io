@@ -11,7 +11,7 @@ date: "2012-09-13T00:00:01.000Z"
 It's been several months since the last time I put my hands on something related to GPUs. Sadly, I get very rarely the chance to get this kind of jobs.
 So, to keep myself trained (just in case I will get one), during the last two weeks I worked on an "exercise project".
 
-For this exercise project I choosed to port to GPU an algorithm that I studied during my University years. [Here you can find some informations](http://en.wikipedia.org/wiki/Levenshtein_distance):
+For this exercise project I choosed to port to GPU an algorithm that I studied during my University years. [Here you can find some informations](https://en.wikipedia.org/wiki/Levenshtein_distance):
 
 I'll try to explain in few words and with a little example what is the Levenshtein distance.
 Given two strings, the Levenstein distance is the minimum number of character insertion, deletion or substitution, to change a string into the other, ie:

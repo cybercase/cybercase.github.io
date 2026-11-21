@@ -11,7 +11,7 @@ date: "2020-03-26T05:35:07.322Z"
 If you've never heard of the MiniDisc don't worry, you're not alone.
 
 If you're curious, you can catch up by reading the [Wikipedia page](https://en.wikipedia.org/wiki/MiniDisc),
-or the old community portal [minidisc.org](http://www.minidisc.org/), or interact with the reddit community of [/r/minidisc](https://reddit.com/r/minidisc).
+or the old community portal [minidisc.org](https://www.minidisc.org/), or interact with the reddit community of [/r/minidisc](https://reddit.com/r/minidisc).
 
 If you're not, long story short, it's a dead music format released by Sony at the beginning of the '90s, that was slowly killed
 by the popularity of the many MP3 players that started coming out in the early 2000s.

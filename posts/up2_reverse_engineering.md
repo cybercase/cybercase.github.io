@@ -40,7 +40,7 @@ find another way to trigger the vibration.
 I struggled to understand how the communication protocol has changed, and see if I could find another command to exploit.
 But just looking at the stream of bluetooth packets wasn't enough...
 
-so I though of disassembling the app and inspecting its `.smali` source code using [apktool](http://ibotpeaches.github.io/Apktool/)
+so I though of disassembling the app and inspecting its `.smali` source code using [apktool](https://ibotpeaches.github.io/Apktool/)
 to search for anything that could be useful.
 
 After going through the sources for a while I noticed a `log` method used all over the app, probably for debugging purposes,
@@ -93,7 +93,7 @@ were suggesting that the protocol was relying on some kind of encryption to comm
 
 > I needed more, so I thought of using a decompiler.
 
-I tried some like [Procyon](https://bitbucket.org/mstrobel/procyon/), [CFR](http://www.benf.org/other/cfr/) to get as much information as possible. With the help of a great tool called [BytecodeViewer](https://github.com/Konloch/bytecode-viewer), I stared to follow the code paths, drawing diagrams, understand the app flow and structures...
+I tried some like [Procyon](https://bitbucket.org/mstrobel/procyon/), [CFR](https://www.benf.org/other/cfr/) to get as much information as possible. With the help of a great tool called [BytecodeViewer](https://github.com/Konloch/bytecode-viewer), I stared to follow the code paths, drawing diagrams, understand the app flow and structures...
 
 Eventually I reproduced all the steps needed to pair and setup an encrypted communication channel with the UP2 and send the vibration command I needed :)
 

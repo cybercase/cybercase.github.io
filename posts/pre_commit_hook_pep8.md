@@ -82,7 +82,7 @@ About the latter point, it's important to say that the pep8 has becomes one of t
 
 `git config --add hooks.pep8options "--ignore=E121,E122" # this ignores Error 121, 122`
 
-A complete list of errors and warnings of pep8 tool is available here: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
+A complete list of errors and warnings of pep8 tool is available here: https://pep8.readthedocs.io/en/latest/intro.html#error-codes
 
 PS.
 

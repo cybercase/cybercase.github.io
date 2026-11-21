@@ -75,6 +75,6 @@ struggle to pass the pre-commit hook checks, but no one should be forced to.
 
 References:
 
-1. [Customizing-Git-Git-Hooks](http://git-scm.com/book/en/Customizing-Git-Git-Hooks)
+1. [Customizing-Git-Git-Hooks](https://git-scm.com/book/en/Customizing-Git-Git-Hooks)
 
 _-- 13/08/2013_

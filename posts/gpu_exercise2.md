@@ -80,7 +80,7 @@ Compute cells $$c_{2,1}$$ and $$c_{1,2}$$: cell $$c_{2,1}$$ requires cells $$c_{
 
 <div class="line-5-m line-5-d text-center">
 
-$$\begin{array}{|c|c|c|c|c|c|} \hline _{X}\backslash^{Y} & \# & y_1 & y_2 & y_3 & \cdots \\ \hline \# & 0 & 1 & 2 & 3 \\ \hline x_1 & 1 & c_{1,1} & \mathbf{c*{1,2}} \\ \hline x_2 & 2 & \mathbf{c*{2,1}} \\ \hline x_3 & 3 \\ \hline \vdots \\ \hline \end{array}$$
+$$\begin{array}{|c|c|c|c|c|c|} \hline _{X}\backslash^{Y} & \# & y_1 & y_2 & y_3 & \cdots \\ \hline \# & 0 & 1 & 2 & 3 \\ \hline x_1 & 1 & c_{1,1} & \mathbf{c_{1,2}} \\ \hline x_2 & 2 & \mathbf{c_{2,1}} \\ \hline x_3 & 3 \\ \hline \vdots \\ \hline \end{array}$$
 
 </div>
 
@@ -88,7 +88,7 @@ Compute cell $$c_{3,1}$$ $$c_{2,2}$$ and $$c_{1,3}$$: cell $$c_{2,2}$$ requires 
 
 <div class="line-5-m line-5-d text-center">
 
-$$\begin{array}{|c|c|c|c|c|c|} \hline _{X}\backslash^{Y} & \# & y_1 & y_2 & y_3 & \cdots \\ \hline \# & 0 & 1 & 2 & 3 \\ \hline x_1 & 1 & c_{1,1} & c*{1,2} & \mathbf{c*{1,3}} \\ \hline x*2 & 2 & c*{2,1} & \mathbf{c*{2,2}} \\ \hline x_3 & 3 & \mathbf{c*{3,1}} \\ \hline \vdots \\ \hline \end{array}$$
+$$\begin{array}{|c|c|c|c|c|c|} \hline _{X}\backslash^{Y} & \# & y_1 & y_2 & y_3 & \cdots \\ \hline \# & 0 & 1 & 2 & 3 \\ \hline x_1 & 1 & c_{1,1} & c_{1,2} & \mathbf{c_{1,3}} \\ \hline x_2 & 2 & c_{2,1} & \mathbf{c_{2,2}} \\ \hline x_3 & 3 & \mathbf{c_{3,1}} \\ \hline \vdots \\ \hline \end{array}$$
 
 </div>
 
