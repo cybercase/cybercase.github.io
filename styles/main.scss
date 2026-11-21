@@ -59,7 +59,7 @@ a {
   line-height: var(--magic-1);
   box-shadow: var(--item-shadow);
   display: block;
-  overflow: overlay;
+  overflow-x: auto;
 }
 
 code {
@@ -73,7 +73,6 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   line-height: var(--magic-1);
-  overflow: overlay;
 }
 
 .text-center {
