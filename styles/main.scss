@@ -1,15 +1,15 @@
-@import "reset";
-@import "variables";
+@use "reset";
+@use "variables";
 
-@import "breakpoints";
-@import "typography";
-@import "grid";
+@use "breakpoints";
+@use "typography";
+@use "grid";
 
-@import "site-header";
-@import "cover";
-@import "content";
-@import "footer";
-@import "hljs";
+@use "site-header";
+@use "cover";
+@use "content";
+@use "footer";
+@use "hljs";
 
 html {
   box-sizing: border-box;
@@ -20,10 +20,10 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  @include mobile {
+  @include breakpoints.mobile {
     font-size: 14px;
   }
-  @include desktop {
+  @include breakpoints.desktop {
     font-size: 16px;
   }
 }

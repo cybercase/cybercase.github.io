@@ -1,25 +1,27 @@
+@use "breakpoints";
+
 @mixin lines() {
   @for $i from 1 through 42 {
     .line-#{$i}-d {
-      @include desktop {
+      @include breakpoints.desktop {
         height: calc(var(--magic-1) * $i);
       }
     }
 
     .line-#{$i}-m {
-      @include mobile {
+      @include breakpoints.mobile {
         height: calc(var(--magic-1) * $i);
       }
     }
 
     .mtop-#{$i}-d {
-      @include desktop {
+      @include breakpoints.desktop {
         margin-top: calc(var(--magic-1) * $i);
       }
     }
 
     .mtop-#{$i}-m {
-      @include mobile {
+      @include breakpoints.mobile {
         margin-top: calc(var(--magic-1) * $i);
       }
     }

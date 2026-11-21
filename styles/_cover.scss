@@ -1,3 +1,6 @@
+@use "breakpoints";
+@use "grid";
+
 .cover {
   position: relative;
   overflow: hidden;
@@ -8,10 +11,10 @@
   height: calc(var(--magic-1) * 11);
 
   &--tall {
-    @include desktop {
+    @include breakpoints.desktop {
       height: calc(var(--magic-1) * 16);
     }
-    @include mobile {
+    @include breakpoints.mobile {
       height: calc(var(--magic-1) * 11);
     }
   }
@@ -37,8 +40,8 @@
   &-box {
     bottom: var(--magic-1);
     position: absolute;
-    left: off(1);
-    right: off(1);
+    left: grid.off(1);
+    right: grid.off(1);
     color: var(--color-bg);
     z-index: 1;
     text-shadow: 0px 3px 21px black;

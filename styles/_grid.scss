@@ -1,3 +1,5 @@
+@use "breakpoints";
+
 // Horizontal grid
 $col-count: 12;
 $col-space: 3.5156%; // 27px @ 768 * 11 col
@@ -14,7 +16,7 @@ $col-width: 5.1107%; // 39.25px @ 768 * 12 col
 @mixin grid-list($count) {
   @for $i from 1 through $count {
     .col-#{$i}-d {
-      @include desktop {
+      @include breakpoints.desktop {
         float: left;
         width: col($i);
         margin-right: $col-space;
@@ -22,7 +24,7 @@ $col-width: 5.1107%; // 39.25px @ 768 * 12 col
     }
 
     .col-#{$i}-m {
-      @include mobile {
+      @include breakpoints.mobile {
         float: left;
         width: col($i);
         margin-right: $col-space;
@@ -30,25 +32,25 @@ $col-width: 5.1107%; // 39.25px @ 768 * 12 col
     }
 
     .break-d {
-      @include desktop {
+      @include breakpoints.desktop {
         margin-right: 0;
       }
     }
 
     .break-m {
-      @include mobile {
+      @include breakpoints.mobile {
         margin-right: 0;
       }
     }
 
     .offset-#{$i}-d {
-      @include desktop {
+      @include breakpoints.desktop {
         margin-left: off($i);
       }
     }
 
     .offset-#{$i}-m {
-      @include mobile {
+      @include breakpoints.mobile {
         margin-left: off($i);
       }
     }
@@ -68,11 +70,11 @@ $col-width: 5.1107%; // 39.25px @ 768 * 12 col
 .container {
   margin: auto;
 
-  @include desktop {
+  @include breakpoints.desktop {
     width: 768px;
   }
 
-  @include mobile {
+  @include breakpoints.mobile {
     width: 100%;
   }
 }

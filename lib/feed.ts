@@ -25,10 +25,10 @@ export const generateRSSFeed = (posts: PostType[]) => {
     updated: posts.length ? new Date(posts[0].date) : undefined,
   });
 
+  // No item id: feed then emits the link as a permalink guid.
   posts.forEach((post) => {
     feed.addItem({
       title: post.title,
-      id: postUrl(post.slug),
       link: postUrl(post.slug),
       description: post.description,
       author: [author],
