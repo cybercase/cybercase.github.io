@@ -97,23 +97,23 @@ However, I have been lurking for some time in [/r/minidisc](https://www.reddit.c
 
 If you're a lucky owner of a NetMD device, you can try the app yourself at
 
-<a href="https://stefano.brilli.me/webminidisc/" target="_blank">https://stefano.brilli.me/webminidisc/</a>
+[https://stefano.brilli.me/webminidisc/](https://stefano.brilli.me/webminidisc/)
 
 Or, if you just want to browse the code, everything's available on GitHub.
 
-<a href="https://github.com/cybercase/webminidisc" target="_blank">https://github.com/cybercase/webminidisc</a>
+[https://github.com/cybercase/webminidisc](https://github.com/cybercase/webminidisc)
 
 ### References
 
-1. FFmpeg, <a href="https://ffmpeg.org/" target="_blank" id="ffmpeg">https://ffmpeg.org/</a>
-2. atracdenc, <a href="https://github.com/dcherednik/atracdenc" target="_blank" id="atracdenc">https://github.com/dcherednik/atracdenc</a>
-3. netmd-js, <a href="https://github.com/cybercase/netmd-js" target="_blank" id="netmdjs">https://github.com/cybercase/netmd-js</a>
-4. Worker Threads, <a href="https://nodejs.org/api/worker_threads.html" target="_blank" id="workerthreads">https://nodejs.org/api/worker_threads.html</a>
-5. Web Workers, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers" target="_blank" id="webworkers">https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers</a>
-6. CryptoJS, <a href="https://code.google.com/archive/p/crypto-js/" target="_blank" id="cryptojs">https://code.google.com/archive/p/crypto-js/</a>
-7. ffmpeg.js, <a href="https://github.com/ffmpegjs/ffmpeg.js" target="_blank" id="ffmpegjs">https://github.com/ffmpegjs/ffmpeg.js</a>
-8. WebUSB, <a href="https://wicg.github.io/webusb/" target="_blank" id="webusb">https://wicg.github.io/webusb/</a>
-9. emscripten, <a href="https://emscripten.org/" target="_blank" id="emscripten">https://emscripten.org/</a>
-10. React, <a href="https://reactjs.org/" target="_blank" id="reacjs">https://reactjs.org/</a>
+1. <span id="ffmpeg">FFmpeg</span>, [https://ffmpeg.org/](https://ffmpeg.org/)
+2. <span id="atracdenc">atracdenc</span>, [https://github.com/dcherednik/atracdenc](https://github.com/dcherednik/atracdenc)
+3. <span id="netmdjs">netmd-js</span>, [https://github.com/cybercase/netmd-js](https://github.com/cybercase/netmd-js)
+4. <span id="workerthreads">Worker Threads</span>, [https://nodejs.org/api/worker_threads.html](https://nodejs.org/api/worker_threads.html)
+5. <span id="webworkers">Web Workers</span>, [https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
+6. <span id="cryptojs">CryptoJS</span>, [https://code.google.com/archive/p/crypto-js/](https://code.google.com/archive/p/crypto-js/)
+7. <span id="ffmpegjs">ffmpeg.js</span>, [https://github.com/ffmpegjs/ffmpeg.js](https://github.com/ffmpegjs/ffmpeg.js)
+8. <span id="webusb">WebUSB</span>, [https://wicg.github.io/webusb/](https://wicg.github.io/webusb/)
+9. <span id="emscripten">emscripten</span>, [https://emscripten.org/](https://emscripten.org/)
+10. <span id="reacjs">React</span>, [https://reactjs.org/](https://reactjs.org/)
 
 _-- 26/03/2020_

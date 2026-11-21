@@ -138,17 +138,17 @@ as the `code` property returns the keycode before keymapping is applied.
 
 ### Further readings
 
-- Internationalize your keyboard controls by Julien Wajsberg, Mozilla Hacks, <a href="https://hacks.mozilla.org/2017/03/internationalize-your-keyboard-controls/" target="_blank">https://hacks.mozilla.org/2017/03/internationalize-your-keyboard-controls/</a>
-- Can I Use KeyboardEvent.key, Can I Use, <a target="_blank" href="https://caniuse.com/#feat=keyboardevent-key">https://caniuse.com/#feat=keyboardevent-key</a>
-- Can I Use KeyboardEvent.code, Can I Use, <a target="_blank" href="https://caniuse.com/#feat=keyboardevent-code">https://caniuse.com/#feat=keyboardevent-code</a>
+- Internationalize your keyboard controls by Julien Wajsberg, Mozilla Hacks, [https://hacks.mozilla.org/2017/03/internationalize-your-keyboard-controls/](https://hacks.mozilla.org/2017/03/internationalize-your-keyboard-controls/)
+- Can I Use KeyboardEvent.key, Can I Use, [https://caniuse.com/#feat=keyboardevent-key](https://caniuse.com/#feat=keyboardevent-key)
+- Can I Use KeyboardEvent.code, Can I Use, [https://caniuse.com/#feat=keyboardevent-code](https://caniuse.com/#feat=keyboardevent-code)
 
 ### References
 
-1. Keypress Event Types - DOM 3 Level Specifications, W3C, <a href="https://www.w3.org/TR/DOM-Level-3-Events/#events-keyboard-types" target="_blank" id="keypress">https://www.w3.org/TR/DOM-Level-3-Events/#events-keyboardevents</a>
-2. Key Mapping, W3C, <a href="https://www.w3.org/TR/DOM-Level-3-Events/#key-mapping" target="_blank" id="keymapping">https://www.w3.org/TR/DOM-Level-3-Events/#key-mapping</a>
-3. `key` Property of KeyboardEvent, W3C, <a href="https://www.w3.org/TR/DOM-Level-3-Events/#key-algorithm" target="_blank" id="keyproperty">https://www.w3.org/TR/DOM-Level-3-Events/#key-algorithm</a>
-4. Modifier Key, Wikipedia, <a href="https://en.wikipedia.org/wiki/Modifier_key" target="_blank" id="modifier">https://en.wikipedia.org/wiki/Modifier_key</a>
-5. Key Codes, W3C, <a href="https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues" target="_blank" id="keycode">https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues</a>
-6. QWERTY-based layouts for Latin script, Keyboard Layout, Wikipedia, <a href="https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script" target="_blank" id="latinscript">https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script</a>
+1. <span id="keypress">Keypress Event Types - DOM 3 Level Specifications, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#events-keyboard-types](https://www.w3.org/TR/DOM-Level-3-Events/#events-keyboard-types)
+2. <span id="keymapping">Key Mapping, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#key-mapping](https://www.w3.org/TR/DOM-Level-3-Events/#key-mapping)
+3. <span id="keyproperty">`key` Property of KeyboardEvent, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#key-algorithm](https://www.w3.org/TR/DOM-Level-3-Events/#key-algorithm)
+4. <span id="modifier">Modifier Key, Wikipedia</span>, [https://en.wikipedia.org/wiki/Modifier_key](https://en.wikipedia.org/wiki/Modifier_key)
+5. <span id="keycode">Key Codes, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues](https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues)
+6. <span id="latinscript">QWERTY-based layouts for Latin script, Keyboard Layout, Wikipedia</span>, [https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script](https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script)
 
 _-- 22/05/2017_
