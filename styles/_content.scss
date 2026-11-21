@@ -140,13 +140,13 @@
 
   sup {
     vertical-align: super;
-    font-size: ms(0);
+    font-size: var(--font-ms-0);
     line-height: 0;
   }
 
   sub {
     vertical-align: sub;
-    font-size: ms(0);
+    font-size: var(--font-ms-0);
     line-height: 0;
   }
 
@@ -154,7 +154,7 @@
     margin-top: 0;
     font-style: italic;
     font-weight: 300;
-    font-size: ms(0);
+    font-size: var(--font-ms-0);
     text-align: center;
   }
 
