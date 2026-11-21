@@ -4,6 +4,14 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Not supported yet by the lint stack (as of 2026-11): eslint-plugin-react
+      # peers eslint <=9, typescript-eslint peers typescript <6.1.
+      # Remove these once both declare support.
+      - dependency-name: "eslint"
+        versions: [">=10"]
+      - dependency-name: "typescript"
+        versions: [">=7"]
     groups:
       next-react:
         patterns:
