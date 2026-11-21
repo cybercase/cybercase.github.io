@@ -27,7 +27,12 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({
       })}
     >
       <nav className="site-header-nav">
-        <a href="/feed.rss" rel="alternate" type="application/rss+xml">
+        <a
+          href="/feed.rss"
+          rel="alternate"
+          type="application/rss+xml"
+          aria-label="RSS feed"
+        >
           <FaRss size={20} />
         </a>
         <span></span>
