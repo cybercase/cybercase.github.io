@@ -39,5 +39,3 @@ be used. It's in my debug_ptr repository on GitHub:
     ./test
 
 In the next post, I'll try to focus on some interesting parts of this very simple smart pointer.
-
-_--22/08/2012_

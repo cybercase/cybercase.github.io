@@ -87,5 +87,3 @@ A complete list of the pep8 errors and warnings is available here: https://pep8.
 PS.
 
 I've only been using this hook for a couple of days, so it may (probably) have some bugs. Feel free to contribute at <https://github.com/cybercase/funproject/blob/master/experiments/pre-commit> ;)
-
-_-- 15/09/2013_

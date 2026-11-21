@@ -183,3 +183,19 @@
     }
   }
 }
+
+// Dateline above the post title (or above the first paragraph when the
+// title is on the cover label).
+.post-meta .post-date {
+  margin-top: var(--magic-2);
+  font-family: var(--font-sans);
+  font-size: var(--font-ms-0);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-h3);
+}
+
+.post-meta + .blog-article > :first-child {
+  margin-top: var(--magic--1);
+}

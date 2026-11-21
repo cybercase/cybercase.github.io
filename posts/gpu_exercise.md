@@ -80,5 +80,3 @@ On the other hand, to retrieve all the operations of the optimal solution, we ne
 I hope you enjoyed this simple introduction to the algorithm. In the next post I'll go straight into the implementation, and the problems (and solutions) of making this algorithm run on a GPU, with a lot of code of course :)
 
 And naturally, if you spot any errors, I'd be really happy to hear about them ;)
-
-_--13/09/2012_

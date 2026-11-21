@@ -146,5 +146,3 @@ The returned `Result` object gets a `_thread` object, created by the `_start` he
     }
 
 I hope you enjoyed this series! If you have questions or something isn't clear, open an issue on the [funproject repository](https://github.com/cybercase/funproject): I'll be happy to answer or rewrite the unclear parts.
-
-_-- 29/12/2011_

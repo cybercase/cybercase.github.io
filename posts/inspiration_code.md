@@ -95,5 +95,3 @@ Want to compile and run this code?
     git clone https://github.com/cybercase/funproject.git
     cd funproject/other
     g++ concurrent.cpp -o concurrent -Wall # add -lpthread if you are on a linux system
-
-_-- 19/12/2011_

@@ -47,5 +47,3 @@ Read here the [UpNotifications privacy policy](/upnotifications_privacy)
 
 This product is not affiliated with, nor endorsed or licensed in any way by Jawbone.
 Jawbone, UP, and UP24 are trademarks or registered trademarks of Jawbone corporation. All rights reserved.
-
-_-- 21/03/2015_

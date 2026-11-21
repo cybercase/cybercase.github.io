@@ -151,5 +151,3 @@ Here's how you can get, compile and run the code for this example:
     g++ order.cpp -o order -Wall
 
 One interesting thing I discovered while writing this example is that function templates can't be partially specialized (that's why `Orderer` is a struct and not a function), and that even their full specializations don't behave the way you might expect. There's a good discussion of this topic at <http://www.gotw.ca/publications/mill17.htm>: the example by Peter Dimov and Dave Abrahams shows why specializing function templates is usually a bad idea.
-
-_-- 15/01/2012_

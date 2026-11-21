@@ -288,5 +288,3 @@ And finally, here we are:
 You can find the final version of `xmlimporter.py` and `structures.xml` in the `python_metaprogramming` folder of my [funproject repository](https://github.com/cybercase/funproject).
 
 If you have 3 hours to spare and a lot of love for this metaprogramming stuff, I really recommend watching David Beazley's entire talk. Also, I apologize in advance for any errors in this post.
-
-_-- 22/05/2013_

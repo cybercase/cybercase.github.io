@@ -132,5 +132,3 @@ These are the results on my late-2010 MacBook Air:
     Distance: 14332
 
 Please note that this is an educational implementation, and there's a lot of room for improvement to exploit all the features of the underlying architecture.
-
-_--16/09/2012_

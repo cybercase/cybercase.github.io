@@ -116,5 +116,3 @@ And since there's no way (without root permission) to control when the UP app ru
 Also, I want to be sure about the legal consequences of releasing any protocol specs.
 
 Unlike the old UP24's protocol, this one is also used on devices like the UP4 for [contactless payments](https://web.archive.org/web/2015/https://jawbone.com/blog/introducing-up4/), so this time Jawbone could be much more interested in keeping it secret to avoid security issues.
-
-_-- 19/09/2015_

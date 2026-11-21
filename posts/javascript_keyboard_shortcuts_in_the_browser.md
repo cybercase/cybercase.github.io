@@ -150,5 +150,3 @@ since `code` identifies the physical key, before keymapping is applied.
 4. <span id="modifier">Modifier Key, Wikipedia</span>, [https://en.wikipedia.org/wiki/Modifier_key](https://en.wikipedia.org/wiki/Modifier_key)
 5. <span id="latinscript">QWERTY-based layouts for Latin script, Keyboard Layout, Wikipedia</span>, [https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script](https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script)
 6. <span id="keycode">Key Codes, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues](https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues)
-
-_-- 22/05/2017_

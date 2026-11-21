@@ -69,5 +69,3 @@ If you like this project, or have ideas about what the next step for debug_ptr c
     cd debug_ptr
     g++ -Wall -o test debug_ptr_test.cc -DENABLE_DEBUG_TYPES
     ./test
-
-_--01/09/2012_

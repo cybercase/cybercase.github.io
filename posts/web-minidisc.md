@@ -115,5 +115,3 @@ Or, if you just want to browse the code, everything's available on GitHub.
 8. <span id="webusb">WebUSB</span>, [https://wicg.github.io/webusb/](https://wicg.github.io/webusb/)
 9. <span id="emscripten">emscripten</span>, [https://emscripten.org/](https://emscripten.org/)
 10. <span id="reacjs">React</span>, [https://reactjs.org/](https://reactjs.org/)
-
-_-- 26/03/2020_

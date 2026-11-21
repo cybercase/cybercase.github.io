@@ -19,6 +19,7 @@ export interface PostProps {
 
 const Post: NextPageWithLayout<PostProps> = ({ post }) => {
   const { asPath } = useRouter();
+  const date = new Date(post.date);
   return (
     <>
       <Head>
@@ -30,6 +31,18 @@ const Post: NextPageWithLayout<PostProps> = ({ post }) => {
         <meta property="og:url" content={getAbsoluteURL(asPath)} />
         <meta property="og:type" content="website" />
       </Head>
+      <div className="content post-meta">
+        <p className="post-date">
+          <time dateTime={date.toISOString().slice(0, 10)}>
+            {date.toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              timeZone: "UTC",
+            })}
+          </time>
+        </p>
+      </div>
       <article
         className="content blog-article"
         lang="en"

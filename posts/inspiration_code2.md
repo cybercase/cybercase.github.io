@@ -71,5 +71,3 @@ And this is the functor for all the other kinds of callable objects taking one a
     };
 
 I needed a special functor like `_class_functor1` to handle instance methods, because C++ doesn't provide a way to store the callable result of `(c->*m)`.
-
-_-- 20/12/2011_

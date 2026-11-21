@@ -16,5 +16,3 @@ I would never have thought that such a simple question, implementing the C min a
 Even though lately I've started to think less highly of C++ (but that's a topic for another post), I find this kind of problem a great brain teaser.
 
 And look at the author of the article: yes, it's Andrei Alexandrescu, the author of [Modern C++ Design](../inspiration_code/) :)
-
-_--10/03/2012_

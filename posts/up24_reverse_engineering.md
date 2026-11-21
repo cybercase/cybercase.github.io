@@ -62,5 +62,3 @@ I'm still writing my custom-notifications app, but I'm not releasing any of its 
 ### Assignment
 
 I also ran some experiments to reverse engineer a couple of the _sniffed_ values. What happens if you change the previous value to "-20 32 8 16 4 53 1 0 **3** 0 1 125" ? :)
-
-_-- 11/10/2014_
