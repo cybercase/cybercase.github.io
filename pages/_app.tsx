@@ -12,7 +12,7 @@ const merriweather = Merriweather({
   display: "swap",
 });
 const roboto = Roboto({
-  weight: ["100", "300", "400", "900"],
+  weight: ["900"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
