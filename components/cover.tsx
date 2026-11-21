@@ -7,6 +7,7 @@ interface CoverProps {
   imageUrl?: string;
   title?: string;
   subtitle?: string;
+  caption?: string;
 }
 
 export const Cover: React.FC<CoverProps> = React.memo(function Cover({
@@ -14,19 +15,26 @@ export const Cover: React.FC<CoverProps> = React.memo(function Cover({
   dark,
   title,
   subtitle,
+  caption,
   imageUrl,
 }) {
   return (
-    <div
-      className={clsx("cover", { "cover--tall": tall, "cover--dark": dark })}
-      style={{ backgroundImage: `url(${imageUrl})` }}
-    >
-      {title ? (
-        <div className="cover-box">
-          <h1 className="cover-box-title">{title}</h1>
-          {subtitle && <span className="cover-box-subtitle">{subtitle}</span>}
-        </div>
-      ) : null}
-    </div>
+    <>
+      <div
+        className={clsx("cover", {
+          "cover--tall": tall,
+          "cover--dark": dark,
+        })}
+        style={{ backgroundImage: `url(${imageUrl})` }}
+      >
+        {title ? (
+          <div className="cover-box">
+            <h1 className="cover-box-title">{title}</h1>
+            {subtitle && <span className="cover-box-subtitle">{subtitle}</span>}
+          </div>
+        ) : null}
+      </div>
+      {caption ? <p className="cover-caption">{caption}</p> : null}
+    </>
   );
 });

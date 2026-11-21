@@ -14,6 +14,7 @@ export interface SiteHeaderProps {
 
 export const SiteHeader: React.FC<SiteHeaderProps> = ({
   cover,
+  coverCaption,
   coverSubtitle,
   coverTitle,
   coverDark,
@@ -40,6 +41,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({
           title={coverTitle}
           tall={coverTall ?? false}
           subtitle={coverSubtitle}
+          caption={coverCaption}
           imageUrl={cover}
         />
       ) : null}

@@ -62,3 +62,14 @@
     }
   }
 }
+
+// Photo caption, shown right below the cover image
+.cover-caption {
+  margin: calc(var(--magic--1) / 2) grid.off(1) 0;
+  text-align: right;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-ms-0);
+  line-height: var(--magic-0);
+  color: var(--color-h3);
+}
