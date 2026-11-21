@@ -1,34 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# stefano.brilli.me
 
-## Getting Started
+Personal homepage and blog, built with [Next.js](https://nextjs.org/) (Pages Router) as a fully static site and hosted on GitHub Pages.
 
-First, run the development server:
+## Development
+
+Requires Node 24 (see `.nvmrc`; Node >= 20.9 can build, but the commit hook's lint-staged needs >= 22.22).
 
 ```bash
-npm run dev
-# or
-yarn dev
+npm install
+npm run dev     # http://localhost:3000
+npm run lint    # ESLint
+npm run build   # static export to out/, then generates out/feed.rss
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm install` also sets up a pre-commit hook that runs ESLint and Prettier on staged files.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Writing a post
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Add a Markdown file to `posts/`. The file name becomes the URL: `posts/my-post.md` is served at `/blog/my-post/`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```markdown
+---
+title: "Post title"
+description: "Used for the meta description, Open Graph and RSS"
+date: "2026-01-31T00:00:00.000Z"
+coverImage: "/images/my-cover.jpg" # optional, file in public/images/
+coverTitle: "Short title" # optional, shown on the cover and in the archive
+coverSubtitle: "Subtitle" # optional
+coverDark: true # optional, light text over a dark cover
+---
 
-## Learn More
+Content in GitHub-flavored Markdown. Math goes between `$$...$$`
+(single `$` is not math). Code blocks are syntax-highlighted.
+```
 
-To learn more about Next.js, take a look at the following resources:
+Invalid LaTeX fails the build.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Pushing to `main` runs `.github/workflows/deploy.yml`, which lints, builds and deploys `out/` to GitHub Pages. Pull requests are built and checked but not deployed.
