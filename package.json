@@ -32,6 +32,7 @@
     "unified": "^11.0.5"
   },
   "devDependencies": {
+    "@types/hast": "^3.0.5",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
