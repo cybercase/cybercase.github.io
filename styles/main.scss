@@ -13,8 +13,11 @@
 
 html {
   box-sizing: border-box;
-  background-color: var(--color-fg);
+  background-color: var(--color-bg);
   font-family: var(--font-serif);
+  // Reserve scrollbar space on both sides so the centered column doesn't
+  // shift between short and long pages.
+  scrollbar-gutter: stable both-edges;
 
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
