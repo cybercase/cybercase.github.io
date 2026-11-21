@@ -1,11 +1,14 @@
 import { Feed } from "feed";
 import { baseUrl, PostType } from "./constants";
 
+const postUrl = (slug: string) => `${baseUrl}/blog/${slug}/`;
+
+/** `posts` must be sorted newest first, as returned by getAllPosts. */
 export const generateRSSFeed = (posts: PostType[]) => {
   const author = {
     name: "Stefano Brilli",
     email: "stefano@brilli.me",
-    link: "https://twitter.com/thecybercase",
+    link: baseUrl,
   };
 
   const feed = new Feed({
@@ -16,19 +19,18 @@ export const generateRSSFeed = (posts: PostType[]) => {
     id: baseUrl,
     link: baseUrl,
     language: "en",
-    feedLinks: `${baseUrl}/rss.xml`,
+    feedLinks: { rss: `${baseUrl}/feed.rss` },
     author,
-    updated: new Date(2022, 4, 6), // avoid changing the feed everytime it's built
+    // Derived from the content (not the build time) so the feed is stable.
+    updated: posts.length ? new Date(posts[0].date) : undefined,
   });
 
-  // Add each article to the feed
   posts.forEach((post) => {
     feed.addItem({
       title: post.title,
-      id: post.slug,
-      link: `${baseUrl}/blog/${post.slug}`,
+      id: postUrl(post.slug),
+      link: postUrl(post.slug),
       description: post.description,
-      // content: post.content,
       author: [author],
       date: new Date(post.date),
     });

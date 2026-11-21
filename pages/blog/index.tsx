@@ -4,13 +4,7 @@ import React from "react";
 import BaseLayout from "../../components/layouts/base";
 import { SiteHeader } from "../../components/site-header";
 import { getAllPosts } from "../../lib/api";
-import {
-  postMetaFields,
-  PostType,
-  NextPageWithLayout,
-} from "../../lib/constants";
-import { generateRSSFeed } from "../../lib/feed";
-import fs from "fs";
+import { PostType, NextPageWithLayout } from "../../lib/constants";
 
 export interface PostProps {
   allPosts: PostType[];
@@ -69,12 +63,7 @@ export const getStaticProps: GetStaticProps<
   PostProps,
   { slug: string }
 > = async () => {
-  const allPosts = getAllPosts(postMetaFields);
-
-  // Also create the feed
-  const feed = generateRSSFeed(allPosts);
-  fs.writeFileSync("public/feed.rss", feed.rss2());
-
+  const allPosts = getAllPosts(["slug", "title", "coverTitle", "date"]);
   return {
     props: { allPosts },
   };

@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "tsx scripts/build-feed.ts",
     "lint": "next lint",
     "prepare": "husky install",
-    "deploy": "next build && gh-pages -d out --dotfiles"
+    "deploy": "npm run build && gh-pages -d out --dotfiles"
   },
   "dependencies": {
     "classnames": "^2.3.1",
@@ -44,6 +45,7 @@
     "lint-staged": "^12.4.1",
     "prettier": "^2.6.2",
     "sass": "^1.51.0",
+    "tsx": "^4.23.15",
     "typescript": "4.6.4"
   },
   "lint-staged": {
