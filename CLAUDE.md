@@ -30,7 +30,7 @@ There is no test suite. Check changes by building and comparing the generated HT
 
 **RSS.** `scripts/build-feed.ts` (run with tsx as `postbuild`) uses `getAllPosts` and `generateRSSFeed` to write `out/feed.rss`. The feed's `updated` date is the newest post's date, so the output is deterministic.
 
-**Layouts.** Pages use a per-page layout pattern: `NextPageWithLayout` in `lib/constants.ts` has a `getLayout(page, props)` function, which `pages/_app.tsx` calls. Each page wraps itself in `BaseLayout` and passes in a `SiteHeader`, whose cover props come from post front matter or are set by the page. `coverCaption` is accepted but not rendered.
+**Layouts.** Pages use a per-page layout pattern: `NextPageWithLayout` in `lib/constants.ts` has a `getLayout(page, props)` function, which `pages/_app.tsx` calls. Each page wraps itself in `BaseLayout` and passes in a `SiteHeader`, whose cover props come from post front matter or are set by the page. `coverCaption` renders as a small caption below the cover image.
 
 **Styling.** Global SCSS partials in `styles/` use the Sass module system (`@use`, not `@import`) and are loaded through `styles/main.scss` in `_app.tsx`. A partial that uses mixins, functions or placeholders from another partial must `@use` it. Fonts (Merriweather, Roboto, Ubuntu Mono) are self-hosted via `next/font/google` in `_app.tsx`, which also defines the `--font-serif`, `--font-sans` and `--font-monospace` CSS variables that the SCSS uses.
 
