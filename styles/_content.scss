@@ -93,7 +93,7 @@
       font-weight: 600;
       font-size: var(--font-ms-2);
       line-height: var(--magic-1);
-      padding: var(--magic-1) / 2 0;
+      padding: calc(var(--magic-1) / 2) 0;
     }
   }
 
