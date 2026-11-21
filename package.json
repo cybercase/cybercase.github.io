@@ -17,20 +17,20 @@
     "classnames": "^2.3.1",
     "feed": "^4.2.2",
     "gray-matter": "^4.0.3",
-    "katex": "^0.16.47",
+    "katex": "^0.19.1",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-icons": "^4.3.1",
-    "rehype-highlight": "^5.0.2",
-    "rehype-katex": "^6.0.2",
-    "rehype-stringify": "^9.0.3",
-    "remark-gfm": "^3.0.1",
-    "remark-math": "^5.1.1",
-    "remark-parse": "^10.0.1",
-    "remark-rehype": "^10.1.0",
-    "remark-smartypants": "^2.0.0",
-    "unified": "^10.1.2"
+    "rehype-highlight": "^7.0.2",
+    "rehype-katex": "^7.0.1",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "remark-smartypants": "^3.0.3",
+    "unified": "^11.0.5"
   },
   "husky": {
     "hooks": {
@@ -54,5 +54,8 @@
   "lint-staged": {
     "*.{js,mjs,ts,tsx}": "eslint --cache",
     "*.{js,mjs,ts,tsx,css,scss,json}": "prettier --check"
+  },
+  "overrides": {
+    "katex": "$katex"
   }
 }
