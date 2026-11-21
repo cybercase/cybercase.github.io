@@ -21,9 +21,9 @@
 
   --magic--1: calc(var(--font-ms-1) / 2);
   --magic-0: calc(var(--font-ms-1));
-  --magic-1: calc(var(--font-ms-1) * 2);
-  --magic-2: calc(var(--font-ms-1) * 2 * 2);
-  --magic-4: calc(var(--font-ms-1) * 2 * 4);
+  --magic-1: calc(var(--font-ms-1) * 1.6875);
+  --magic-2: calc(var(--magic-1) * 2);
+  --magic-4: calc(var(--magic-1) * 4);
 
   /* grid */
   --col-gutter: 3.5156%;

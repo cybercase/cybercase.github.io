@@ -46,7 +46,7 @@
     font-weight: 900;
     font-family: var(--font-sans);
     font-size: var(--font-ms-3);
-    line-height: var(--magic-1);
+    line-height: calc(var(--magic-1) * 1.5);
     margin-top: var(--magic-2);
   }
 
@@ -167,10 +167,13 @@
   }
   & > p:first-of-type {
     margin-top: var(--magic-2);
+    // Contain the drop cap so it can't indent the next paragraph when the
+    // first one is a single line.
+    display: flow-root;
     // Drop cap spanning two lines of the baseline grid
     &::first-letter {
       float: left;
-      font-size: 3.6rem;
+      font-size: 3.2rem;
       font-weight: 700;
       line-height: var(--magic-2);
       margin-right: 0.08em;

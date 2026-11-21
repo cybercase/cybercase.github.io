@@ -1,28 +1,33 @@
 @use "breakpoints";
 
+// Fixed line unit for the line-N / mtop-N helpers. Posts use them to size
+// embedded iframes, images and KaTeX blocks, so they keep the original 2rem
+// instead of following the --magic-1 rhythm unit.
+$legacy-line: 2rem;
+
 @mixin lines() {
   @for $i from 1 through 42 {
     .line-#{$i}-d {
       @include breakpoints.desktop {
-        height: calc(var(--magic-1) * $i);
+        height: calc($legacy-line * $i);
       }
     }
 
     .line-#{$i}-m {
       @include breakpoints.mobile {
-        height: calc(var(--magic-1) * $i);
+        height: calc($legacy-line * $i);
       }
     }
 
     .mtop-#{$i}-d {
       @include breakpoints.desktop {
-        margin-top: calc(var(--magic-1) * $i);
+        margin-top: calc($legacy-line * $i);
       }
     }
 
     .mtop-#{$i}-m {
       @include breakpoints.mobile {
-        margin-top: calc(var(--magic-1) * $i);
+        margin-top: calc($legacy-line * $i);
       }
     }
   }

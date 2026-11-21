@@ -8,14 +8,14 @@
   background-position: center center;
   background-size: cover;
 
-  height: calc(var(--magic-1) * 11);
+  height: calc(var(--magic-1) * 13);
 
   &--tall {
     @include breakpoints.desktop {
-      height: calc(var(--magic-1) * 16);
+      height: calc(var(--magic-1) * 19);
     }
     @include breakpoints.mobile {
-      height: calc(var(--magic-1) * 11);
+      height: calc(var(--magic-1) * 13);
     }
   }
 
