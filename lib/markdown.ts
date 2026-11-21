@@ -19,5 +19,5 @@ export async function markdownToHtml(markdown: string) {
     .use(rehypeKatex, { throwOnError: true, displayMode: true })
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(markdown);
-  return result.value;
+  return String(result);
 }

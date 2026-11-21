@@ -18,7 +18,7 @@ export function getPostBySlug(
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  const items: { [k: string]: string } = {};
+  const items: Record<string, unknown> = {};
 
   fields.forEach((field) => {
     if (field === "slug") {
@@ -33,7 +33,7 @@ export function getPostBySlug(
     }
   });
 
-  return items as PostType;
+  return items as unknown as PostType;
 }
 
 export function getAllPosts(fields: readonly PostField[] = []): PostType[] {

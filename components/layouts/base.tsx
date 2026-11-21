@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { MyFooter } from "../site-footer";
-import { SiteHeader, SiteHeaderProps } from "../site-header";
 
 export interface BaseLayoutProps {
   children?: React.ReactNode;

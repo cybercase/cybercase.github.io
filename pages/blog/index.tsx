@@ -47,7 +47,7 @@ const Blog: NextPageWithLayout<PostProps> = ({ allPosts }: PostProps) => {
   );
 };
 
-Blog.getLayout = (page, pageProps) => {
+Blog.getLayout = (page) => {
   return (
     <BaseLayout
       title={"Blog Archive"}
