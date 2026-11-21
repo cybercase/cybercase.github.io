@@ -65,13 +65,6 @@
     margin-top: var(--magic-1);
     line-height: var(--magic-1);
     word-break: break-word;
-    a {
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      &:hover {
-        text-decoration-style: solid;
-      }
-    }
   }
 
   em {
@@ -160,6 +153,11 @@
   a {
     word-wrap: break-word;
     color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    &:hover {
+      text-decoration-style: solid;
+    }
   }
 }
 
