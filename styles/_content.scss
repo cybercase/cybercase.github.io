@@ -169,9 +169,13 @@
   }
   & > p:first-of-type {
     margin-top: var(--magic-2);
+    // Drop cap spanning two lines of the baseline grid
     &::first-letter {
-      font-size: var(--font-ms-4);
-      line-height: 0;
+      float: left;
+      font-size: 3.6rem;
+      font-weight: 700;
+      line-height: var(--magic-2);
+      margin-right: 0.08em;
     }
   }
 }
