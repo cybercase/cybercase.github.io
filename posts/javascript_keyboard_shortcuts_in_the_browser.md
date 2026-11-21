@@ -7,16 +7,16 @@ coverDark: true
 date: "2017-05-22T00:00:01.000Z"
 ---
 
-Current DOM specification provides 2 event types for handling keyboard actions<sup>[[1]](#keypress)</sup>:
+The current DOM specification provides two event types for handling keyboard actions<sup>[[1]](#keypress)</sup>:
 
 - `keydown`
 - `keyup`
 
-These events match the physical actions of pressing and releasing a key of the keyboard, and have a payload with the
+These events match the physical actions of pressing and releasing a key, and carry a payload with the
 result of _keymapping_<sup>[[2]](#keymapping)</sup> by the OS (or any software in between), taking into account current _layout_, modifier and dead keys.
 
 The result of _keymapping_ is stored in the `key` property of the event according to the _key algorithm_<sup>[[3]](#keyproperty)</sup>.
-The pressing of a specific key can be caught just by listening for `keydown` and checking the `key` prop. e.g.
+You can catch the press of a specific key just by listening for `keydown` and checking the `key` property. For example:
 
     let shortcutHandler = (event) => {
         // Shortcut: l
@@ -31,8 +31,8 @@ The pressing of a specific key can be caught just by listening for `keydown` and
 ## Modifiers
 
 Keyboard shortcuts may require the combination of a character key and one or more modifiers<sup>[[4]](#modifier)</sup>.
-Modifiers like `Meta` or `Ctrl` usually don't have the purpose of altering the unicode produced by a key,
-so it's easy to define and catch a shortcut combination using the modifiers props stored in the event payload. e.g.
+Modifiers like `Meta` or `Ctrl` usually don't alter the character produced by a key,
+so it's easy to define and catch a shortcut using the modifier properties of the event. For example:
 
     let shortcutHandler = (event) => {
         // Shortcut: Meta+c
@@ -42,7 +42,7 @@ so it's easy to define and catch a shortcut combination using the modifiers prop
         }
     }
 
-On the other hand `Alt` and `Shift` modifiers may alter the unicode produced by a key, leading to issues in shortcut definition and catching. e.g.
+On the other hand, the `Alt` and `Shift` modifiers may alter the character produced by a key, which causes problems when defining and catching shortcuts. For example:
 
     let shortcutHandler = (event) => {
         // Shortcut: Meta+Shift+s
@@ -59,7 +59,7 @@ On the other hand `Alt` and `Shift` modifiers may alter the unicode produced by 
 ## Normalization
 
 Fixing the previous example is trivial: just replace the lowercase "s" with the uppercase "S" in the shortcut definition.
-The new definition considers the effect produced from the `Shift` modifier, making the code work just fine. e.g.
+The new definition takes into account the effect of the `Shift` modifier, and the code works just fine:
 
     let shortcutHandler = (event) => {
         // Shortcut: Meta+Shift+S
@@ -71,36 +71,36 @@ The new definition considers the effect produced from the `Shift` modifier, maki
         }
     }
 
-Let's call **Normalization** the action of replacing of the
-character key in a keyboard shortcut, with the unicode produced from the same character key plus the modifiers in the shortcut.
+Let's call **Normalization** the act of replacing the
+character key in a keyboard shortcut with the character produced by the same key plus the shortcut's modifiers.
 
 ## Layouts
 
-Normalization falls short when considering multiple layouts; in fact it's layout dependant. e.g.:
+Normalization falls short when you consider multiple layouts, because it's layout-dependent. For example:
 
 - Normalization<sub>US</sub> for `Meta + Shift + 2` is `Meta + Shift + @`
 - Normalization<sub>IT</sub> for `Meta + Shift + 2` is `Meta + Shift + "`
 - Normalization<sub>FR</sub> for `Meta + Shift + 2` is `Meta + Shift + 2`.
 
-This limits the Normalization effectiveness to just the shortcuts that use a character key for which its modified unicode char, according to the shortcut modifiers, is the same across every layout.
-Let's call these shortcuts _layout-safe_. e.g.:
+This limits Normalization to shortcuts whose character key, combined with the shortcut's modifiers, produces the same character in every layout.
+Let's call these shortcuts _layout-safe_. For example:
 
 - Any lowercase [a-z] letter plus the `Shift` modifier should produce the uppercase version of that letter in every layout.
 
 ## Recap
 
-When definining shortcuts for the browsers and multiple layouts it's worth considering that:
+When defining shortcuts for the browser and for multiple layouts, keep in mind that:
 
 - Browsers and OS catch shortcuts too; be aware of collisions.
 - Browsers don't provide an API for knowing the current layout.
-- Some key may not be available on some layouts or may require additional modifiers to produce the same character.
-- If the shortcut contains a character key, modifiers may change the unicode emitted by the `keydown` in an unpredictable way.
+- Some keys may not be available on some layouts or may require additional modifiers to produce the same character.
+- If the shortcut contains a character key, modifiers may change the character reported by `keydown` in an unpredictable way.
 
 ## Workaround Ideas
 
 ### Catch 'Em All
 
-Given a shortcut, the idea is to collect its Normalization for every layout and listening for all of them.
+Given a shortcut, the idea is to collect its Normalization for every layout and listen for all of them.
 
     let shortcutHandler = (event) => {
         if ((event.key === '2' && event.metaKey === true && event.shiftKey) ||
@@ -111,23 +111,23 @@ Given a shortcut, the idea is to collect its Normalization for every layout and 
         }
     }
 
-The obvious problem is that every shortcut ends up producing a set of Normalized shortcuts, and if the interesection of these sets is not empty it's impossible to choose which shortcut was triggered. e.g.
+The obvious problem is that every shortcut ends up producing a set of Normalized shortcuts, and if these sets intersect, it's impossible to tell which shortcut was triggered. For example:
 
 1. Normalization<sub>[US, IT]</sub> for `Meta+Shift+=` is [`Meta+Shift++`, `Meta+Shift+*`]
 2. Normalization<sub>[US, IT]</sub> for `Meta+Shift+8` is [`Meta+Shift+*`, `Meta+Shift+(`]
 
-Clearly `Meta+Shift+*` falls into the intersection, making impossible to know if the source is `Meta+Shift+=` on IT layout or `Meta+Shift+8` on US layout.
+Clearly `Meta+Shift+*` falls into the intersection, making it impossible to know whether the source is `Meta+Shift+=` on IT layout or `Meta+Shift+8` on US layout.
 
 ### Just Ask
 
-The application can infere the keyboard layout using language and location of the browser. Then the Normalization function for such layout is used for catching shortcuts unambiguosly.
+The application can infer the keyboard layout from the browser's language and location, and then use the Normalization function for that layout to catch shortcuts unambiguously.
 
 ### Recovering Numbers
 
 Shortcuts with number keys plus modifiers are not _layout-safe_.
-However, the number keys position on the physical layout should be the same for most of Latin script layouts [[6]](#latinscript).
-Using the `code` property of `keydown` event [[5]](#keycode), should be possible to check for numeric keys without ambiguity,
-as the `code` property returns the keycode before keymapping is applied.
+However, the position of the number keys should be the same in most Latin-script layouts<sup>[[5]](#latinscript)</sup>.
+Using the `code` property of the `keydown` event<sup>[[6]](#keycode)</sup>, it should be possible to check for number keys without ambiguity,
+since `code` identifies the physical key, before keymapping is applied.
 
     let shortcutHandler = (event) => {
         if (event.code === 'Digit2' && event.metaKey === true && event.shiftKey) {
@@ -148,7 +148,7 @@ as the `code` property returns the keycode before keymapping is applied.
 2. <span id="keymapping">Key Mapping, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#key-mapping](https://www.w3.org/TR/DOM-Level-3-Events/#key-mapping)
 3. <span id="keyproperty">`key` Property of KeyboardEvent, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#key-algorithm](https://www.w3.org/TR/DOM-Level-3-Events/#key-algorithm)
 4. <span id="modifier">Modifier Key, Wikipedia</span>, [https://en.wikipedia.org/wiki/Modifier_key](https://en.wikipedia.org/wiki/Modifier_key)
-5. <span id="keycode">Key Codes, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues](https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues)
-6. <span id="latinscript">QWERTY-based layouts for Latin script, Keyboard Layout, Wikipedia</span>, [https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script](https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script)
+5. <span id="latinscript">QWERTY-based layouts for Latin script, Keyboard Layout, Wikipedia</span>, [https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script](https://en.wikipedia.org/wiki/Keyboard_layout#QWERTY-based_layouts_for_Latin_script)
+6. <span id="keycode">Key Codes, W3C</span>, [https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues](https://www.w3.org/TR/DOM-Level-3-Events/#keys-codevalues)
 
 _-- 22/05/2017_

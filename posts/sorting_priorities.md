@@ -6,7 +6,7 @@ date: "2012-01-15T00:00:01.000Z"
 
 # Sorting Priorities
 
-Let's say you have your 3d colored point type:
+Let's say you have a 3D colored point type:
 
     struct MyPoint
     {
@@ -19,7 +19,7 @@ Let's say you have your 3d colored point type:
         int d;
     };
 
-You define a vector of `MyPoint` objects carefully ordered by color, depth, height and width.
+You define a vector of `MyPoint` objects carefully sorted by color, depth, height and width.
 
     int width = 100;
     int height = 100;
@@ -36,14 +36,14 @@ You define a vector of `MyPoint` objects carefully ordered by color, depth, heig
                 for (int x=0; x<width; ++x)
                     pts.push_back(MyPoint(c, x, y, d));
 
-Then one of your funny colleagues put a
+Then one of your funny colleagues puts a
 
     std::random_shuffle(pts.begin(), pts.end());
 
-just the line before you are scanning the ordered array of `MyPoint`... If it's not a colleague, could be that you need to apply a transformation matrix to all of your points, or whatever else that will break the color, depth, height and width ordering of your set.
+on the line right before you scan the sorted vector of `MyPoint`. Or, less dramatically, you may need to apply a transformation matrix to all of your points, or anything else that breaks the color, depth, height and width ordering of your set.
 
-To order back your vector by the same priorities, you can use the STL sort algorithm with some custom comparison function.
-The the first function I wrote was this:
+To sort your vector again by the same priorities, you can use the STL sort algorithm with a custom comparison function.
+The first function I wrote was this:
 
     bool mypoint_all_sort_fn(const MyPoint& p0, const MyPoint& p1)
     {
@@ -63,9 +63,9 @@ The the first function I wrote was this:
 
 and then `std::sort(pts.begin(), pts.end(), mypoint_all_sort_fn);`
 
-I found this solution the ugliest among the others. It's not scalable, has too many indentations and strong code dependancy... And also if `mypoint_all_sort_fn` was defined as operator inside `MyStruct` declaration I wouldn't like to have such a function inside my software.
+I found this solution the ugliest of all. It doesn't scale, it has too many levels of indentation, and the conditions are tangled together. Even if `mypoint_all_sort_fn` were defined as an operator inside the `MyPoint` declaration, I wouldn't like to have such a function in my software.
 
-The second solution I came to was using several `stable_sort`
+The second solution I came up with was using several `stable_sort` calls:
 
     bool mypoint_x_sort_fn(const MyPoint& p0, const MyPoint& p1)
     {
@@ -91,9 +91,9 @@ and then
     std::stable_sort(pts.begin(), pts.end(), mypoint_d_sort_fn);
     std::stable_sort(pts.begin(), pts.end(), mypoint_c_sort_fn);
 
-I found this solution not too bad by the code style point of view, but it's not the same about performances. More are the values you want to sort by, more are the stable_sort steps you have to do.
+This solution isn't too bad from a code style point of view, but the same can't be said for performance: the more values you want to sort by, the more `stable_sort` passes you have to do.
 
-The last solution, which I found the most fascinating one, was suggested to me by two of my collegues, and it took me a just a small bunch of time to write the code down.
+The last solution, which I found the most fascinating, was suggested to me by two of my colleagues, and it took me very little time to write it down.
 
     template <typename T> int element(const T&, int i);
 
@@ -115,12 +115,12 @@ The last solution, which I found the most fascinating one, was suggested to me b
         }
     };
 
-Using templates it's possible to make the compiler generate the ugly if-else code. Then the task of providing the right element for the sorting is demanded to an element(int) function. Also, it's possible substitute the element(int) function with an element(int) member function (or maybe an operator) in `MyPoint` definition. This is how it work:
+Using templates, you can make the compiler generate the ugly if-else code for you. The task of providing the right element for the sorting is delegated to an `element(int)` function, which could also be replaced by an `element(int)` member function (or maybe an operator) in the `MyPoint` definition. This is how it works:
 
     template <> int element<MyPoint>(const MyPoint& p, int i)
     {
         // Watch out!
-        // The higher is the i-value, the most significant is the member
+        // The higher the value of i, the more significant the member
         switch(i)
         {
             case 3:
@@ -142,14 +142,14 @@ Using templates it's possible to make the compiler generate the ugly if-else cod
 
 and then `std::sort(pts.begin(), pts.end(), mypoint_sort);`
 
-That's it! A more readable switch-case statement provides the priority of sorting.... and the `mypoint_sort` function call the template right specialization of Orderer Struct static compare function.
+That's it! A more readable switch-case statement defines the sorting priorities, and the `mypoint_sort` function calls the static `compare` function of the right `Orderer` specialization.
 
-Here how you can find, compile and run the code for this example:
+Here's how you can get, compile and run the code for this example:
 
-    git clone git://github.com/cybercase/funproject.git
+    git clone https://github.com/cybercase/funproject.git
     cd funproject/other
     g++ order.cpp -o order -Wall
 
-One interesting thing I discovered while writing the code of this example, is that you can't use template function specialization. I found a discussion about this topic at <http://www.gotw.ca/publications/mill17.htm>. The Peter Dimov and Dave Abrahams example shows why template specialization can't be done with functions.
+One interesting thing I discovered while writing this example is that function templates can't be partially specialized (that's why `Orderer` is a struct and not a function), and that even their full specializations don't behave the way you might expect. There's a good discussion of this topic at <http://www.gotw.ca/publications/mill17.htm>: the example by Peter Dimov and Dave Abrahams shows why specializing function templates is usually a bad idea.
 
 _-- 15/01/2012_

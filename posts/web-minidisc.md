@@ -13,31 +13,31 @@ If you've never heard of the MiniDisc don't worry, you're not alone.
 If you're curious, you can catch up by reading the [Wikipedia page](https://en.wikipedia.org/wiki/MiniDisc),
 or the old community portal [minidisc.org](https://www.minidisc.org/), or interact with the reddit community of [/r/minidisc](https://reddit.com/r/minidisc).
 
-If you're not, long story short, it's a dead music format released by Sony at the beginning of the '90s, that was slowly killed
+If you're not, long story short, it's a dead music format released by Sony in the early '90s, and slowly killed
 by the popularity of the many MP3 players that started coming out in the early 2000s.
 
-Some of the last MiniDisc players, branded as _NetMD_ units, were equipped with a USB port that allowed for recording music onto the device by using the infamously SonicStage software (Windows only, of course).
+Some of the last MiniDisc players, branded as _NetMD_ units, were equipped with a USB port that allowed for recording music onto the device using the infamous SonicStage software (Windows only, of course).
 When Sony abandoned the MiniDisc, that software was left unmaintained and, nowadays, it can't run outside virtual machines or without using dangerously unsigned drivers.
 
 Luckily the OSS community managed to completely reverse engineer the NetMD protocol and, before the death of the MiniDisc, the [linux-minidisc](https://wiki.physik.fu-berlin.de/linux-minidisc/doku.php) project was released.
 
-A few of weeks ago, just before the infamously Coronavirus lockdown here in Italy, I've been lucky enough to find my old [MZ-N710](https://www.minidisc.org/part_Sony_MZ-N710.html) in my parents' basement.
+A few weeks ago, just before the coronavirus lockdown here in Italy, I was lucky enough to find my old [MZ-N710](https://www.minidisc.org/part_Sony_MZ-N710.html) in my parents' basement.
 Determined to make it work on my Macbook, I brought it home and successfully managed to compile and run the linux-minidisc CLI.
 
 ## Porting the MiniDisc to Web
 
-The process for uploading the music via the CLI was comprised of 2 steps:
+Uploading music with the CLI took two steps:
 
 1. Convert your music
 
 - Use `ffmpeg` <sup>[[1]](#ffmpeg)</sup> to create a 16bit 44100Hz pcm wav file (SP quality)
-- Use `atrac3denc` <sup>[[2]](#atracdenc)</sup> to create a 132/66 Kbit ATRAC3 file (LP2/LP4 quality)
+- Use `atracdenc` <sup>[[2]](#atracdenc)</sup> to create a 132/66 Kbit ATRAC3 file (LP2/LP4 quality)
 
 2. Use the CLI to send the converted music to the device
 
-Not the most _user friendly_ process for those who're not fancy to type commands in a terminal.
+Not the most _user-friendly_ process for those who don't fancy typing commands in a terminal.
 
-So, after pondering for a while, I realized these steps could have been encapsulated in a _no-install-required_
+So, after pondering for a while, I realized these steps could be wrapped in a _no-install-required_
 progressive web app, for a considerable step up in the ease of the process.
 
 I would just use:
@@ -53,21 +53,21 @@ I started by porting the code from linux-minidisc to a new JS library that I've 
 This library implements the NetMD protocol and takes care of the USB communication with the device.
 It will also allow other devs to write their own app, should mine not suit their needs.
 
-It runs either in `nodejs` and in every browser supporting the WebUSB standard, and uses _Worker Threads_<sup>[[4]](#workerthreads)</sup> or
+It runs both in Node.js and in every browser that supports the WebUSB standard, and uses _Worker Threads_<sup>[[4]](#workerthreads)</sup> or
 _Web Workers_<sup>[[5]](#webworkers)</sup> to speed up the
 music encryption step required by the protocol. The encryption has been implemented on top of _CryptoJS_<sup>[[6]](#cryptojs)</sup>.
 
 ### 2. Using emscripten
 
 I was lucky enough to find a project called `ffmpeg.js`<sup>[[7]](#ffmpegjs)</sup> that already ported ffmpeg to WASM.
-So, the only thing left to do was to configure it properly and recompile, just to trim down the binary size.
+So, the only thing left to do was to configure it properly and recompile it, to trim down the binary size.
 A full tutorial is available in the GitHub page of `ffmpeg.js`.
 
-Then, I've followed a similar process to cross compile the `atracdenc` encoder and eventually write a simple JS wrapper around it.
+Then I followed a similar process to cross-compile the `atracdenc` encoder, and wrote a simple JS wrapper around it.
 
 ### 3. The Web MiniDisc Application
 
-After gathering all the bricks together, I've shifted my focus to design the app's user interface and experience.
+With all the building blocks in place, I shifted my focus to designing the app's user interface and experience.
 
 <div class="mtop-1-m mtop-1-d line-21-d" style="text-align: center;">
     <img src="/images/webminidiscapp.png" alt="Web MiniDisc App Wireframe" style="width: 100%;"/>
@@ -79,9 +79,9 @@ Then I started off with the classic _create react app + TypeScript_ template, an
 
 ## How to use a NetMD device in 2020
 
-A couple of nights later I was ready to record the first demo of the the Web MiniDisc Application.
+A couple of nights later I was ready to record the first demo of the Web MiniDisc Application.
 
-It has been exciting to see the app work seamlessly both on my Macbook and on my Android phone without an `if` needed.
+It was exciting to see the app work seamlessly both on my Macbook and on my Android phone without an `if` needed.
 
 <iframe class="line-17-d line-11-m" src="//www.youtube.com/embed/Frs8qhw0g9Y" frameborder="0" allowfullscreen></iframe>
 

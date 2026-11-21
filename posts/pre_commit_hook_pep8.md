@@ -8,7 +8,7 @@ date: "2013-09-15T00:00:01.000Z"
 
 ## PEP8 Version
 
-A couple of days ago I've refactored and enhanced my pre-commit hook to check also for PEP8 compliancy of Python source files. To achieve this I used the pep8 tool that you can easily install with:
+A couple of days ago I refactored and improved my pre-commit hook so that it also checks Python source files for PEP8 compliance. To do this I used the pep8 tool, which you can easily install with:
 
 `pip install pep8`
 
@@ -72,20 +72,20 @@ And here's the new pre-commit hook:
         exit 1
     fi
 
-This new version is quite straightforward so I'm not digging too much into it.
+This new version is quite straightforward, so I won't dig too much into it.
 The two main changes are:
 
-- Discover of command `git show` :)
-- Add pep8 style test
+- I discovered the `git show` command :)
+- I added the pep8 style check
 
-About the latter point, it's important to say that the pep8 has becomes one of the requirements to use this hook. Also, you can configure your pep8 options by typing:
+About the latter, note that pep8 is now a requirement for using this hook. You can also configure your pep8 options by typing:
 
 `git config --add hooks.pep8options "--ignore=E121,E122" # this ignores Error 121, 122`
 
-A complete list of errors and warnings of pep8 tool is available here: https://pep8.readthedocs.io/en/latest/intro.html#error-codes
+A complete list of the pep8 errors and warnings is available here: https://pep8.readthedocs.io/en/latest/intro.html#error-codes
 
 PS.
 
-I'm using this hook just from a couple of days, so it may (probably) have some bugs... feel free to contribute at <https://github.com/cybercase/funproject/blob/master/experiments/pre-commit> ;)
+I've only been using this hook for a couple of days, so it may (probably) have some bugs. Feel free to contribute at <https://github.com/cybercase/funproject/blob/master/experiments/pre-commit> ;)
 
 _-- 15/09/2013_

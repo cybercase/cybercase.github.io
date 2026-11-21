@@ -8,11 +8,11 @@ date: "2011-12-20T00:00:01.000Z"
 
 ## Part 2
 
-Since the `pthread_create` function signature allows running of `void*(*)(void*)` function type only, I was quite sure on packaging into a struct both the callable object and its args, and pass them to some function matching that signature. Here is the "some function" I named `_help_fn`:
+Since `pthread_create` can only run functions of type `void*(*)(void*)`, I decided to pack both the callable object and its arguments into a struct, and pass it to a function matching that signature. Here is that function, which I named `_help_fn`:
 
-    template <S> void* _help_fn(void* v)
+    template <typename S> void* _help_fn(void* v)
     {
-        // This function signature match the one needed by
+        // This function signature matches the one needed by
         // pthread_create func.
         S* st = (S*)v;
         st->exec();
@@ -20,8 +20,8 @@ Since the `pthread_create` function signature allows running of `void*(*)(void*)
         return NULL;
     };
 
-The `S` template parameter is meant to be the type of a package struct. The exec() method from this struct should call any callable type, together with its arguments and, obviously, write somewhere the return value of the call.
-This is how I wrote the package struct, named `_help_st`.
+The `S` template parameter is the type of a package struct. The `exec()` method of this struct should call any callable type with its arguments and, of course, store the return value of the call somewhere.
+This is how I wrote the package struct, named `_help_st`:
 
     template <typename T, typename I> struct _help_st
     {
@@ -45,11 +45,11 @@ This is how I wrote the package struct, named `_help_st`.
         }
     };
 
-For now, don't pay too much attention to the `_thread` member variable... You just need to know that this member variable holds the result of thread's computations.
-I assigned `exec()` member function just the task of storing the returned value by a some callable object. The return value type is told by template parameter `T`. Then, the dirty job of calling the function with all of its args is left to a functor object of type `I`.
+For now, don't pay too much attention to the `_thread` member variable. You just need to know that it holds the result of the thread's computation.
+The only task of the `exec()` member function is to store the value returned by the callable object. The return type is given by the template parameter `T`, and the dirty job of calling the function with all of its arguments is left to a functor object of type `I`.
 
-I didn't find any other way than writing as many functors as needed to match all of the previously told callable types.
-This is the functor for instance method pointers receiving one arg:
+I couldn't find any other way than writing one functor for each of the callable types listed in the previous post.
+This is the functor for pointers to instance methods taking one argument:
 
     template <typename T, typename C, typename I0> struct _class_functor1
     {
@@ -58,9 +58,9 @@ This is the functor for instance method pointers receiving one arg:
         T(C::*m)(I0);
         C* c;
         I0 a0;
-    }
+    };
 
-And this is the functor for all the other kinds of callable objects receiving one arg:
+And this is the functor for all the other kinds of callable objects taking one argument:
 
     template <typename T, typename O, typename I0> struct _functor1
     {
@@ -68,8 +68,8 @@ And this is the functor for all the other kinds of callable objects receiving on
         T operator()() { return o(a0); }
         O o;
         I0 a0;
-    }
+    };
 
-I needed a special functor object like `_class_functor1` for handling instance methods. This is because C++ don't provide a way to store the callable result of `(c->*m)`.
+I needed a special functor like `_class_functor1` to handle instance methods, because C++ doesn't provide a way to store the callable result of `(c->*m)`.
 
 _-- 20/12/2011_

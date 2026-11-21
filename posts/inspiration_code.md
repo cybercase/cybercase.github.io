@@ -6,27 +6,27 @@ date: "2011-12-19T00:00:01.000Z"
 
 # Inspiration Code
 
-A couple of week ago I run into Modern C++ Design, a book from Andrei Alexandrescu.
-I read it all the way in just a few days. That was so fascinating! This book shows
-you the unknown and magic power of template metaprogramming... a kind of _avada kedavra_ of C++.
+A couple of weeks ago I came across Modern C++ Design, a book by Andrei Alexandrescu.
+I read it cover to cover in just a few days. It was so fascinating! This book shows
+you the little-known, magic power of template metaprogramming: a kind of _avada kedavra_ of C++.
 
-I've got uncertain reviews from my colleagues about this book... But my opinion is definitely a ten out of ten.
+My colleagues have mixed opinions about this book, but for me it's definitely a ten out of ten.
 
-But now, let's get to the topic! Just a few day ago, I started writing some code for one of my so-called "funprojects". A snippet of code contained in thread.h file to wraps pthreads functions with a Thread class. After few attempts I decided that my Thread class should be able to execute everything that is a callable in C++.
+But now, let's get to the point! Just a few days ago, I started writing some code for one of my so-called "funprojects": a `thread.h` file that wraps the pthreads functions in a Thread class. After a few attempts I decided that my Thread class should be able to execute anything that is callable in C++.
 
-From Modern C++ Design, here is the list of entities that support operator `()`.
+Modern C++ Design lists the entities that support operator `()`:
 
 - C-like functions
 - C-like pointers to functions
 - References to functions
-- Functors (object that defines operator() )
+- Functors (objects that define `operator()`)
+- The result of applying operator `.*` or `->*` with a pointer to a member function on the right-hand side of the expression
 
-The result of applying operator `.*` or operator `->*` having a pointer to a member function in the right-hand side of the expression.
-The behavior that I was trying to achieve for any of them was
+The behavior I wanted for all of them was:
 
 `RETURN_TYPE result = Thread::run(some_callable, arg1, arg2, ...);`
 
-And this is what I've got in the end
+And this is what I ended up with:
 
     // main.cpp
     #include <iostream>
@@ -90,9 +90,9 @@ And this is what I've got in the end
 
 In the next post I'm going to show some details of the code in `thread.h`.
 
-Want to compile and run this code?!
+Want to compile and run this code?
 
-    git clone git://github.com/cybercase/funproject.git
+    git clone https://github.com/cybercase/funproject.git
     cd funproject/other
     g++ concurrent.cpp -o concurrent -Wall # add -lpthread if you are on a linux system
 

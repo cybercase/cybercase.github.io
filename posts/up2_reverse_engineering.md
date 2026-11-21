@@ -8,7 +8,7 @@ coverDark: true
 date: "2015-09-19T00:00:01.000Z"
 ---
 
-**July 2018 UPDATE:** I've released the source code of this project on github.</br>
+**July 2018 UPDATE:** I've released the source code of this project on GitHub.<br/>
 Find out more here: [https://github.com/cybercase/up2_hacking](https://github.com/cybercase/up2_hacking)
 
 ### Having fun with Jawbone UP2
@@ -16,35 +16,34 @@ Find out more here: [https://github.com/cybercase/up2_hacking](https://github.co
 A few months after releasing [UpNotifications for UP24](../up24_notifications)
 I received a lot of emails asking to add support for the new **Jawbone UP2**.
 
-As soon as Jawbone made the UP2 available outside the US I placed my order,
-and after receiving the new band, without thinking too much I started tuning the UpNotifications
-source code to include the UP2 among supported devices just to see if the same hack used for UP24 was working also on this band...
+As soon as Jawbone made the UP2 available outside the US, I placed my order,
+and when the new band arrived, without thinking too much, I started tweaking the UpNotifications
+source code to add the UP2 to the supported devices, just to see if the same hack I used for the UP24 also worked on this band.
 
 > Unfortunately, it was not.
 
-I didn't give up, and following the same steps of my own [UP24 Hacking](../up24_reverse_engineering) blogpost,
-I opened Android Studio, turned on the debugger, started intercepting calls to the android BLE API and see what has changed with respect to UP24...
+I didn't give up. Following the same steps as in my own [UP24 Hacking](../up24_reverse_engineering/) post,
+I opened Android Studio, turned on the debugger and started intercepting calls to the Android BLE API to see what had changed since the UP24.
 
-The bluetooth packets I was reading were completely different from the UP24 packets,
-so I thought that maybe it was just a matter of replacing the old UP24's pairing command with the new UP2's one. And so I did.
+The Bluetooth packets I was reading were completely different from the UP24 packets,
+so I thought that maybe it was just a matter of replacing the old UP24's pairing command with the new UP2 one. And so I did.
 
-I soon found out that the same trick of _sending a pairing command to make the band vibrate_ was not working because
-the new UP2 knows if it has been already paired with a phone, and in that case it does not vibrate on pairing.
+I soon found out that the trick of _sending a pairing command to make the band vibrate_ didn't work, because
+the new UP2 knows if it has already been paired with a phone, and in that case it does not vibrate on pairing.
 
-While the UP24 **allowed anyone** to make vibrate your band without your permission just by sending a pairing command,
-with the UP2 **Jawbone has fixed this issue**. Though this is a good news for all UP2 owners, this meant that I had to
+While the UP24 **allowed anyone** to make your band vibrate without your permission just by sending a pairing command,
+with the UP2 **Jawbone has fixed this issue**. Though this is good news for all UP2 owners, it meant that I had to
 find another way to trigger the vibration.
 
 > I needed to go deeper.
 
-I struggled to understand how the communication protocol has changed, and see if I could find another command to exploit.
-But just looking at the stream of bluetooth packets wasn't enough...
-
-so I though of disassembling the app and inspecting its `.smali` source code using [apktool](https://ibotpeaches.github.io/Apktool/)
+I tried hard to understand how the communication protocol had changed, and to find another command to exploit.
+But just looking at the stream of Bluetooth packets wasn't enough,
+so I thought of disassembling the app and inspecting its `.smali` code with [apktool](https://ibotpeaches.github.io/Apktool/)
 to search for anything that could be useful.
 
-After going through the sources for a while I noticed a `log` method used all over the app, probably for debugging purposes,
-that was disabled just by a simple flag check.
+After going through the sources for a while, I noticed a `log` method used all over the app, probably for debugging,
+that was disabled by a simple flag check.
 
 In a file called `JBLog.smali`, I changed the following lines
 
@@ -53,11 +52,11 @@ In a file called `JBLog.smali`, I changed the following lines
 +    if-eqz v0, :cond_0
 ```
 
-then reassembled the app and installed into my phone.
+then reassembled the app and installed it on my phone.
 
-> I started getting a lot of debug information placed there right from UP developers :)
+> I started getting a lot of debug information, put there by the UP developers themselves :)
 
-I immediately found out that the communication protocol was much more sophisticated than the one used for UP24.
+I immediately found out that the communication protocol was much more sophisticated than the one used for the UP24.
 
 Log messages like this
 
@@ -89,33 +88,33 @@ and
     d >> (4, 63, 0) > null
 ```
 
-were suggesting that the protocol was relying on some kind of encryption to communicate over a secure channel, using a shared encryption key exchanged at the time of pairing.
+suggested that the protocol relied on some kind of encryption to communicate over a secure channel, using a shared key exchanged at pairing time.
 
 > I needed more, so I thought of using a decompiler.
 
-I tried some like [Procyon](https://bitbucket.org/mstrobel/procyon/), [CFR](https://www.benf.org/other/cfr/) to get as much information as possible. With the help of a great tool called [BytecodeViewer](https://github.com/Konloch/bytecode-viewer), I stared to follow the code paths, drawing diagrams, understand the app flow and structures...
+I tried a few, like [Procyon](https://bitbucket.org/mstrobel/procyon/) and [CFR](https://www.benf.org/other/cfr/), to get as much information as possible. With the help of a great tool called [BytecodeViewer](https://github.com/Konloch/bytecode-viewer), I started following the code paths, drawing diagrams, and working out the app's flow and data structures.
 
-Eventually I reproduced all the steps needed to pair and setup an encrypted communication channel with the UP2 and send the vibration command I needed :)
+Eventually I reproduced all the steps needed to pair and set up an encrypted communication channel with the UP2 and send the vibration command I needed :)
 
 <iframe class="line-11-m line-17-d" src="//www.youtube.com/embed/uwsyjyM5GJU" frameborder="0" allowfullscreen></iframe>
 
 > Victory! ... almost.
 
-As I came back on my initial goal of integrating UP2 support into UpNotifications, I realized that it would be very hard to achieve any kind of _user friendly_ experience.
+When I went back to my initial goal of adding UP2 support to UpNotifications, I realized it would be very hard to offer any kind of _user-friendly_ experience.
 
-The first problem comes from the fact that the encryption key is kept secret into the original UP application, and the only way to retrieve such key is to have a _rooted_ phone.
+The first problem is that the encryption key is kept secret inside the official UP app, and the only way to retrieve it is with a _rooted_ phone.
 
-The second crucial problem is that, even if it was possible to get the encryption key easily, UP2 supports only one bluetooth connection at time.
+The second crucial problem is that, even if it were possible to get the encryption key easily, the UP2 supports only one Bluetooth connection at a time.
 This means that an _UpNotifications for UP2_ would not work while the band is connected to the original UP application.
 
 And since there's no way (without root permission) to control when the UP app runs or communicates with the band, **UpNotifications for UP2 would be incompatible with the official UP app**.
 
-> I still haven't decided whether write an _UpNotifications for UP2_ or not...
+> I still haven't decided whether to write an _UpNotifications for UP2_ or not.
 
-~~So, for the time being, I'm not releasing the source code of the "test" app I wrote~~ (moreover, currently the code is quite a mess).
+~~So, for the time being, I'm not releasing the source code of the "test" app I wrote~~ (besides, the code is currently quite a mess).
 
-Also, I want to be sure of the legal consequences of releasing any protocol specs...
+Also, I want to be sure about the legal consequences of releasing any protocol specs.
 
-Unlike the old UP24, Jawbone is using this protocol on devices like UP4 for [contactless payments](https://jawbone.com/blog/introducing-up4/), so this time they could be much more interested in keeping the protocol as much secret as possible to avoid security issues.
+Unlike the old UP24's protocol, this one is also used on devices like the UP4 for [contactless payments](https://web.archive.org/web/2015/https://jawbone.com/blog/introducing-up4/), so this time Jawbone could be much more interested in keeping it secret to avoid security issues.
 
 _-- 19/09/2015_

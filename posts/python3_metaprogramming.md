@@ -7,19 +7,18 @@ date: "2013-05-22T00:00:01.000Z"
 # Python 3 Metaprogramming
 
 How can you import XML files into Python 3?
-And why you would?
-... This blogpost doesn't answer this last question, but it's definetly going to answer the first one :)
+And why would you?
+This post doesn't answer the second question, but it definitely answers the first one :)
 
-Everything I'm writing is taken from this talk from David Beazley: [youtube video](https://www.youtube.com/watch?v=sPiWg5jSoZI).
-Consider this post as a very little summary of its contents.
+Everything in this post comes from a talk by David Beazley: [youtube video](https://www.youtube.com/watch?v=sPiWg5jSoZI).
+Consider it a very short summary of its contents.
 
-Let's start with the requirements:
-Python 3.3
-... that's all!
+Let's start with the requirements: Python 3.3.
+That's all!
 
 And let's see what you're getting:
 
-If you define a file structures.xml like this
+If you define a `structures.xml` file like this:
 
     <structures>
         <structure name="Stock">
@@ -29,13 +28,13 @@ If you define a file structures.xml like this
         </structure>
     </structures>
 
-At the end of this blogpost you will get this
+By the end of this post you'll be able to do this:
 
     >>> from structures import *
     >>> s = Stock("GOOG", 100, 99.0)
     >>> # DEFAULT INITIALIZER
     >>> s.name, s.shares, s.price
-    ('GOOG', 1, 1.0)
+    ('GOOG', 100, 99.0)
 
     >>> # TYPE CHECKING
     >>> s.name = 100
@@ -45,11 +44,11 @@ At the end of this blogpost you will get this
     >>> s.name = "GOOOOOOG"
     ValueError: Too big
 
-So, if this just aroused your curiosity, go on reading ;)
+So, if this has piqued your curiosity, read on ;)
 
 The first step is to have a look at descriptors.
-Descriptors is just how properties are implemented in python [see this link]. In this example, we use them as classes to perform checks on values assignment.
-So, let's take as example a descriptor that performs a check such that only values of type str within a certain length are allowed.
+Descriptors are how properties are implemented in Python (see the [Descriptor HowTo Guide](https://docs.python.org/3/howto/descriptor.html)). In this example, we use them to check values on assignment.
+So, let's take as an example a descriptor that only allows values of type str up to a certain length.
 
     class StringDescriptor:
         def __init__(self, name, maxlen):
@@ -89,7 +88,8 @@ So, let's take as example a descriptor that performs a check such that only valu
         raise TypeError("Wrong type, expected: %s" % str(str))
     TypeError: Wrong type, expected: <class 'str'>
 
-    To handle different descriptors, David uses a descriptors hierarchy like the following:
+To handle different descriptors, David uses a hierarchy of descriptors like the following:
+
     class Descriptor:
         def __init__(self, name=None):
             self.name = name
@@ -123,7 +123,7 @@ So, let's take as example a descriptor that performs a check such that only valu
     class Float(Typed):
         ty = float
 
-Then merges the descriptors using multiple inheritance... But pay attention at MRO! (method resolution order)
+Then he combines the descriptors using multiple inheritance. But pay attention to the MRO (method resolution order)!
 
     class Positive(Descriptor):
         def __set__(self, instance, value):
@@ -137,7 +137,7 @@ Then merges the descriptors using multiple inheritance... But pay attention at M
     class PosFloat(Float, Positive):
         pass
 
-Finally to get rid of the repeated variable's name in the descriptor constructor, David use a metaclass to inject the name into the descriptor:
+Finally, to avoid repeating the variable's name in the descriptor constructor, David uses a metaclass to inject the name into the descriptor:
 
     class StructMeta(type):
         def __new__(cls, name, bases, clsdict):
@@ -148,7 +148,7 @@ Finally to get rid of the repeated variable's name in the descriptor constructor
             clsobj = super().__new__(cls, name, bases, clsdict)
             return clsobj
 
-The Stock class definition now becomes
+The Stock class definition now becomes:
 
     class Stock(metaclass=StructMeta):
         name = SizedString(maxlen=4)
@@ -160,13 +160,14 @@ The Stock class definition now becomes
             self.shares = shares
             self.price = price
 
-There is still another "problem" that David try to solve: the code repetition inside the **init** method.
-To address this problem, he changes the previous metaclass as follows.
-from collections import OrderedDict
+There's still another "problem" that David solves: the repeated code in the `__init__` method.
+To address it, he changes the previous metaclass as follows:
+
+    from collections import OrderedDict
 
     class StructMeta(type):
-        @staticmethod
-        def __prepare__(cls, name, bases=None):
+        @classmethod
+        def __prepare__(cls, name, bases):
             # this method returns the dictionary used by the class instance.
             # To generate a signature the parameters order is crucial, so an
             # OrderedDict is used
@@ -189,14 +190,14 @@ from collections import OrderedDict
             clsobj = super().__new__(cls, name, bases, dict(clsdict))
             return clsobj
 
-And the Stock class becomes
+And the Stock class becomes:
 
     class Stock(metaclass=StructMeta):
         name = SizedString(maxlen=4)
         shares = PosInteger()
         price = PosFloat()
 
-At this point it's convenient introduce a Structure base class:
+At this point it's convenient to introduce a Structure base class:
 
     class Structure(metaclass=StructMeta):
         pass
@@ -207,7 +208,7 @@ At this point it's convenient introduce a Structure base class:
         price = PosFloat()
 
 And finally we get to the XML part :)
-The first goal is to generate the python code from the XML file. To achieve this the David use these functions:
+The first goal is to generate Python code from the XML file. To do this, David uses these functions:
 
     from xml.etree.ElementTree import parse
     def _xml_to_code(filename):
@@ -229,7 +230,7 @@ The first goal is to generate the python code from the XML file. To achieve this
             code += '    %s = %s(%s)\n' % (name, dtype, kwargs)
         return code
 
-And the result of parsing the structure.xml file (defined at the beginning of the blogpost) is:
+And the result of parsing the structures.xml file (defined at the beginning of the post) is:
 
     >>> print(_xml_to_code("structures.xml"))
     class Stock(Structure):
@@ -237,8 +238,8 @@ And the result of parsing the structure.xml file (defined at the beginning of th
         shares = PosInteger()
         price = PosFloat()
 
-The final step consists in hooking to the python import system. Full details about the new Import Hooks feature of Python3.3 are found at [PEP-302].
-We begin defining a new importer class to append at sys.meta_path
+The final step is hooking into the Python import system. You can find all the details about import hooks in [PEP 302](https://peps.python.org/pep-0302/).
+We begin by defining a new importer class to append to `sys.meta_path`:
 
     import os
     class StructImporter:
@@ -254,7 +255,7 @@ We begin defining a new importer class to append at sys.meta_path
                     return StructXMLLoader(filename)
             return None
 
-And an XML module loader
+And an XML module loader:
 
     import imp
     class StructXMLLoader:
@@ -278,17 +279,14 @@ And an XML module loader
 
     install_importer()
 
-    And finally here we are:
-    Python3.3 -i xmlimport.py
+And finally, here we are:
+
+    python3.3 -i xmlimport.py
     >>> from structures import *
     >>> s = Stock("GOOG", 1, 1.0)
 
-You can find the final version of the xmlimporter.py and structures.xml under the folder
+You can find the final version of `xmlimporter.py` and `structures.xml` in the `python_metaprogramming` folder of my [funproject repository](https://github.com/cybercase/funproject).
 
-`python_metaprogramming` in my git repository at:
-
-`git://github.com/cybercase/funproject.git`
-
-If you got 3 hours to spend, and a lot of love for this metaprogramming stuff, I really suggest to watch the entire video from David Beazley. Also, I apologize in advance for any error in this blogpost.
+If you have 3 hours to spare and a lot of love for this metaprogramming stuff, I really recommend watching David Beazley's entire talk. Also, I apologize in advance for any errors in this post.
 
 _-- 22/05/2013_

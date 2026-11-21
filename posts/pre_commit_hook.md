@@ -6,17 +6,17 @@ date: "2013-08-13T00:00:01.000Z"
 
 # Pre-commit Hook
 
-The project on which I'm working has acquired some young people recently.
+The project I'm working on has recently taken on some junior developers.
 
-For a couple of them it's even their first working experience so I'm really
-trying to transmit them the importance of conventions and an uniform coding style.
+For a couple of them it's even their first job, so I'm really
+trying to get across the importance of conventions and a uniform coding style.
 
-It's usual (and perfectly normal) to find some coding style mistakes in their commits.
-So, to help us happily code all together, I created a small pre-commit hook
-to put in our repositories.
+It's common (and perfectly normal) to find some coding style mistakes in their commits.
+So, to help us all code happily together, I created a small pre-commit hook
+for our repositories.
 
 Right now it's just a simple no-tabs check, but with some small changes it could
-check for use of deprecated functions or some forgotten `import pdb; pdb.set_trace()` :)
+check for the use of deprecated functions or some forgotten `import pdb; pdb.set_trace()` :)
 
     # Files extensions in hooks.notabs are separated by "|"
     # Eg:
@@ -44,34 +44,34 @@ check for use of deprecated functions or some forgotten `import pdb; pdb.set_tra
         exit 1
     fi
 
-To have it working:
+To make it work:
 
-copy this script into `repository_dir/.git/hooks/pre-commit`.
-Add some file extensions to hooks.notabs variable (these must be separated by |).
-Done!
+1. Copy this script into `repository_dir/.git/hooks/pre-commit`.
+2. Add some file extensions to the `hooks.notabs` config variable, separated by `|`.
+3. Done!
 
-Let's look at each parts in rigorous order of execution
+Let's look at each part, in strict order of execution:
 
-- `notabs=$(git config hooks.notabs)`: retrieves from local config the files extensions to check
+- `notabs=$(git config hooks.notabs)`: retrieves the file extensions to check from the local config
 
 - `git diff --cached --name-only`: lists names of files that have staged changes
 
-- `egrep '\.('$notabs')$'`: removes files having different extensions from the ones in notabs
+- `egrep '\.('$notabs')$'`: filters out files whose extensions aren't in notabs
 
-- `sed 's/^/'$toplevel'/g'`: prepend the absoulute path to each filename
+- `sed 's/^/'$toplevel'/g'`: prepends the absolute path to each filename
 
-- `xargs`: creates a list of arguments using previous file names list
+- `xargs`: turns the list of file names into arguments
 
-- `git diff --cached -- not_a_file`: returns staged changes for files coming from "xargs". Note that "not_a_file" is an unexistant file, specified in case that the output of xargs is empty. In fact if no files are specified the "git diff --cached" command would return staged changes for every file.
+- `git diff --cached -- not_a_file`: returns the staged changes for the files coming from `xargs`. Note that `not_a_file` is a nonexistent file, added in case the output of `xargs` is empty: if no files were specified, `git diff --cached` would return the staged changes for every file.
 
 - `egrep -qn '^\+\.*\t'`: searches for all the lines starting with "+" and containing a tab
 
-Note that this pre-commit hook can be easily bypassed using.
+Note that this pre-commit hook can easily be bypassed with:
 
 `git commit --no-verify`
 
-This reflects exactly the same thought I want communicate to my collegues. Everyone should
-struggle to pass the pre-commit hook checks, but no one should be forced to.
+This is exactly the idea I want to get across to my colleagues: everyone should
+strive to pass the pre-commit hook checks, but no one should be forced to.
 
 References:
 
