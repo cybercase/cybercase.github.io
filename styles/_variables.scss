@@ -6,9 +6,9 @@
 
   --item-shadow: 0px 3px 12px 3px rgba(0, 0, 0, 0.35);
 
-  --font-serif: 'Merriweather', serif;
-  --font-sans: 'Roboto', sans-serif;
-  --font-monospace: 'Ubuntu Mono', monospace;
+  --font-serif: "Merriweather", serif;
+  --font-sans: "Roboto", sans-serif;
+  --font-monospace: "Ubuntu Mono", monospace;
   --font-base-size: 1rem;
 
   /* font modular scale */
@@ -17,16 +17,15 @@
   --font-ms--1: calc(var(--font-ms-0) / var(--font-ms-ratio));
   --font-ms-0: calc(var(--font-base-size) / var(--font-ms-ratio));
   --font-ms-1: calc(var(--font-base-size));
-  --font-ms-2: calc(var(--font-ms-1) * var(--font-ms-ratio) );
-  --font-ms-3: calc(var(--font-ms-2) * var(--font-ms-ratio) );
-  --font-ms-4: calc(var(--font-ms-3) * var(--font-ms-ratio) );
+  --font-ms-2: calc(var(--font-ms-1) * var(--font-ms-ratio));
+  --font-ms-3: calc(var(--font-ms-2) * var(--font-ms-ratio));
+  --font-ms-4: calc(var(--font-ms-3) * var(--font-ms-ratio));
 
   --magic--1: calc(var(--font-ms-1) / 2);
   --magic-0: calc(var(--font-ms-1));
   --magic-1: calc(var(--font-ms-1) * 2);
   --magic-2: calc(var(--font-ms-1) * 2 * 2);
   --magic-4: calc(var(--font-ms-1) * 2 * 4);
-
 
   /* grid */
   --col-gutter: 3.5156%;

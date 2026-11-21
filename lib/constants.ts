@@ -22,7 +22,7 @@ export const postMetaFields = [
   "content",
 ] as const;
 
-export type PostField = typeof postMetaFields[number];
-export type PostType = { [k in typeof postMetaFields[number]]: any };
+export type PostField = (typeof postMetaFields)[number];
+export type PostType = { [k in (typeof postMetaFields)[number]]: any };
 
 export const baseUrl = `https://stefano.brilli.me`;

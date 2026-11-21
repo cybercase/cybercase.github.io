@@ -1,6 +1,15 @@
-
 .content {
-  > h1, > h2, > h3, > h4, > h5, > h6, > p, > ul, > ol, blockquote, .update {
+  > h1,
+  > h2,
+  > h3,
+  > h4,
+  > h5,
+  > h6,
+  > p,
+  > ul,
+  > ol,
+  blockquote,
+  .update {
     @extend %inner-block;
 
     // &:first-child {
@@ -9,7 +18,16 @@
   }
 
   &--debug & {
-    > h1, > h2, > h3, > h4, > h5, > h6, > p, > ul, > ol, blockquote {
+    > h1,
+    > h2,
+    > h3,
+    > h4,
+    > h5,
+    > h6,
+    > p,
+    > ul,
+    > ol,
+    blockquote {
       background-color: rgba(255, 0, 0, 0.1);
     }
   }
@@ -73,13 +91,15 @@
       font-weight: 600;
       font-size: var(--font-ms-2);
       line-height: var(--magic-1);
-      padding: var(--magic-1)/2 0;
+      padding: var(--magic-1) / 2 0;
     }
   }
 
-  ul, ol {
+  ul,
+  ol {
     margin-top: var(--magic-1);
-    ul, ol {
+    ul,
+    ol {
       margin: 0 0 0 var(--magic-2);
     }
   }

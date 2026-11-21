@@ -11,7 +11,6 @@
 @import "footer";
 @import "hljs";
 
-
 html {
   box-sizing: border-box;
   background-color: var(--color-fg);
@@ -21,16 +20,24 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  @include mobile { font-size: 14px; }
-  @include desktop { font-size: 16px; }
+  @include mobile {
+    font-size: 14px;
+  }
+  @include desktop {
+    font-size: 16px;
+  }
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
-code, kbd, pre, samp {
-
+code,
+kbd,
+pre,
+samp {
 }
 
 a {
@@ -46,7 +53,7 @@ a {
 }
 
 .hljs {
-  padding: calc(var(--magic-1) / 2) calc(var(--magic-1)/2);
+  padding: calc(var(--magic-1) / 2) calc(var(--magic-1) / 2);
   margin-top: var(--magic-1);
   font-family: var(--font-monospace);
   line-height: var(--magic-1);
