@@ -4,7 +4,7 @@ Personal homepage and blog, built with [Next.js](https://nextjs.org/) (Pages Rou
 
 ## Development
 
-Requires Node 24 (see `.nvmrc`; Node >= 20.9 can build, but the commit hook's lint-staged needs >= 22.22).
+Requires Node 26 (see `.nvmrc`; Node >= 20.9 can build, but the commit hook's lint-staged needs >= 22.22).
 
 ```bash
 npm install
