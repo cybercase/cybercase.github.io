@@ -10,28 +10,8 @@
   > p,
   > ul,
   > ol,
-  blockquote,
-  .update {
+  blockquote {
     @extend %inner-block;
-
-    // &:first-child {
-    //   margin-top: var(--magic-2);
-    // }
-  }
-
-  &--debug & {
-    > h1,
-    > h2,
-    > h3,
-    > h4,
-    > h5,
-    > h6,
-    > p,
-    > ul,
-    > ol,
-    blockquote {
-      background-color: rgba(255, 0, 0, 0.1);
-    }
   }
 
   h3 {
@@ -58,8 +38,7 @@
     margin-top: var(--magic-2);
   }
 
-  p,
-  .update {
+  p {
     font-family: var(--font-serif);
     font-size: var(--font-ms-1);
     margin-top: var(--magic-1);
@@ -143,13 +122,6 @@
     line-height: 0;
   }
 
-  .caption {
-    margin-top: 0;
-    font-style: italic;
-    font-size: var(--font-ms-0);
-    text-align: center;
-  }
-
   a {
     word-wrap: break-word;
     color: var(--color-fg);
@@ -164,9 +136,6 @@
 }
 
 .blog-article {
-  & > .update {
-    margin-top: var(--magic-2);
-  }
   & > p:first-of-type {
     margin-top: var(--magic-2);
     // Contain the drop cap so it can't indent the next paragraph when the

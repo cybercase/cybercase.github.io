@@ -34,14 +34,3 @@ $legacy-line: 2rem;
 }
 
 @include lines();
-
-.typography--debug {
-  background-image: linear-gradient(
-    to bottom,
-    hsla(200, 100%, 50%, 0.3) 1px,
-    transparent 1px
-  );
-  background-position: left top;
-  background-repeat: repeat;
-  background-size: var(--magic-1) var(--magic-1);
-}

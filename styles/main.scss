@@ -37,19 +37,9 @@ html {
   box-sizing: inherit;
 }
 
-code,
-kbd,
-pre,
-samp {
-}
-
 a {
   text-decoration: none;
   box-sizing: border-box;
-  // text-decoration: underline;
-  // text-decoration-style: dotted;
-  // // text-decoration-color: inherit;
-  // text-decoration-thickness: 1px;
   &:hover {
     text-decoration: underline;
   }
