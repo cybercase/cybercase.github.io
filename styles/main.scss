@@ -59,7 +59,7 @@ a {
   padding: calc(var(--magic-1) / 2) calc(var(--magic-1) / 2);
   margin-top: var(--magic-1);
   font-family: var(--font-monospace);
-  line-height: var(--magic-1);
+  line-height: 1.4;
   box-shadow: var(--item-shadow);
   display: block;
   overflow-x: auto;
