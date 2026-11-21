@@ -3,7 +3,7 @@ title: "The Web MiniDisc Application - Use your old NetMD device in the browser"
 description: "Get control of your MiniDisc device thanks to WebUSB and WASM"
 coverImage: "/images/minidisc.jpg"
 coverTitle: "The Web MiniDisc App"
-coverSubtitle: "Bringing back to life the MiniDisc with WebUSB and WASM"
+coverSubtitle: "Bringing the MiniDisc back to life with WebUSB and WASM"
 coverDark: true
 date: "2020-03-26T05:35:07.322Z"
 ---

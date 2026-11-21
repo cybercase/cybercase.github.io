@@ -16,7 +16,7 @@ const Home: NextPageWithLayout = () => {
               The Web MiniDisc Application
             </Link>
           </h3>
-          Bringing back to life the MiniDisc with WebUSB and WASM.
+          Bringing the MiniDisc back to life with WebUSB and WASM.
         </li>
         <li>
           <h3>
