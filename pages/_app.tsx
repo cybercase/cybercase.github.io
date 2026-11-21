@@ -1,7 +1,7 @@
 import "katex/dist/katex.min.css";
 import "../styles/main.scss";
 import type { AppProps } from "next/app";
-import { Merriweather, Roboto, Ubuntu_Mono } from "next/font/google";
+import { Archivo, Merriweather, Ubuntu_Mono } from "next/font/google";
 import { NextPageWithLayout } from "../lib/constants";
 
 // Self-hosted at build time by next/font (no requests to Google at runtime).
@@ -11,8 +11,9 @@ const merriweather = Merriweather({
   subsets: ["latin"],
   display: "swap",
 });
-const roboto = Roboto({
-  weight: ["900"],
+// Variable font with a width axis: the cover label uses a condensed cut.
+const archivo = Archivo({
+  axes: ["wdth"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
@@ -34,7 +35,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <style jsx global>{`
         :root {
           --font-serif: ${merriweather.style.fontFamily}, serif;
-          --font-sans: ${roboto.style.fontFamily}, sans-serif;
+          --font-sans: ${archivo.style.fontFamily}, sans-serif;
           --font-monospace: ${ubuntuMono.style.fontFamily}, monospace;
         }
       `}</style>

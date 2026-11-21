@@ -35,7 +35,7 @@
   }
 
   h3 {
-    font-weight: 900;
+    font-weight: var(--heading-weight);
     font-family: var(--font-sans);
     font-size: var(--font-ms-2);
     line-height: var(--magic-1);
@@ -43,7 +43,7 @@
   }
 
   h2 {
-    font-weight: 900;
+    font-weight: var(--heading-weight);
     font-family: var(--font-sans);
     font-size: var(--font-ms-3);
     line-height: calc(var(--magic-1) * 1.5);
@@ -51,7 +51,7 @@
   }
 
   h1 {
-    font-weight: 900;
+    font-weight: var(--heading-weight);
     font-family: var(--font-sans);
     font-size: var(--font-ms-4);
     line-height: var(--magic-2);
@@ -83,7 +83,7 @@
     > p {
       text-align: right;
       font-family: var(--font-sans);
-      font-weight: 900;
+      font-weight: var(--heading-weight);
       font-size: var(--font-ms-2);
       line-height: var(--magic-1);
       padding: calc(var(--magic-1) / 2) 0;
@@ -155,8 +155,10 @@
     color: var(--color-fg);
     text-decoration: underline;
     text-decoration-style: dotted;
+    text-decoration-color: var(--color-h3);
     &:hover {
       text-decoration-style: solid;
+      text-decoration-color: var(--color-accent);
     }
   }
 }
@@ -177,6 +179,7 @@
       font-weight: 700;
       line-height: var(--magic-2);
       margin-right: 0.08em;
+      color: var(--color-accent);
     }
   }
 }

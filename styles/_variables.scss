@@ -1,8 +1,12 @@
 :root {
-  --color-bg: #fafafa;
-  --color-fg: #333;
-  --color-h3: #666;
-  --color-link: #666;
+  --color-bg: #f7f7f5; // paper
+  --color-fg: #25272b; // ink
+  --color-h3: #5f6368; // graphite
+  --color-link: #5f6368;
+  --color-rule: #d9d9d4;
+  --color-accent: #d7262d; // rec red
+
+  --heading-weight: 800; // Archivo, for headings, nav and the cover label
 
   --item-shadow: 0px 3px 12px 3px rgba(0, 0, 0, 0.35);
 

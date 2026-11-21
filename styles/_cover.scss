@@ -37,39 +37,59 @@
     }
   }
 
+  // The label: a paper strip that hangs one unit below the photo's bottom
+  // edge and grows upwards when the title wraps.
   &-box {
-    bottom: var(--magic-1);
     position: absolute;
-    left: grid.off(1);
-    right: grid.off(1);
-    color: var(--color-bg);
+    bottom: calc(var(--magic-1) * -1);
+    // The text lines up with the body column; the strip extends past it.
+    left: calc(#{grid.off(1)} - var(--magic-1));
+    right: calc(#{grid.off(1)} - var(--magic-1));
     z-index: 1;
-    text-shadow: 0px 3px 21px black;
+    padding: calc(var(--magic-1) / 2) var(--magic-1) calc(var(--magic-1) / 2)
+      calc(var(--magic-1) - 4px);
+    background: var(--color-bg);
+    border: 1px solid var(--color-rule);
+    border-left: 4px solid var(--color-accent);
+    color: var(--color-fg);
 
     &-title {
-      font-weight: 900;
+      display: block;
+      font-weight: var(--heading-weight);
       font-size: var(--font-ms-4);
+      font-stretch: 87.5%;
       line-height: var(--magic-2);
       font-family: var(--font-sans);
+
+      // One step smaller on phones, so the label doesn't swallow the photo
+      @include breakpoints.mobile {
+        font-size: var(--font-ms-3);
+        line-height: calc(var(--magic-1) * 1.5);
+      }
     }
 
     &-subtitle {
+      display: block;
       font-family: var(--font-serif);
-      font-weight: 700;
+      font-style: italic;
       font-size: var(--font-ms-1);
       line-height: var(--magic-1);
+      color: var(--color-h3);
       word-break: break-word;
     }
   }
 }
 
-// Photo caption, shown right below the cover image
-.cover-caption {
-  margin: calc(var(--magic--1) / 2) grid.off(1) 0;
-  text-align: right;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: var(--font-ms-0);
-  line-height: var(--magic-0);
-  color: var(--color-h3);
+// Make room for the label's overhang. Padding on the header, not a margin
+// on the cover, so it can't collapse into the content's top margin.
+.cover:has(.cover-box) {
+  overflow: visible;
+
+  & + .cover-caption {
+    margin-top: calc(var(--magic-1) + var(--magic--1));
+  }
+}
+
+.site-header:has(.cover-box):not(:has(.cover-caption)) {
+  padding-bottom: var(--magic-1);
 }
