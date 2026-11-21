@@ -8,7 +8,7 @@ date: "2014-10-11T00:00:00.322Z"
 
 ### Intro
 
-Last month I received a [Jawbone UP24](http://jawbone.com/store/buy/up24) as birthday gift, and after a couple of weeks of _standard use_ I couldn't resist digging into its technical side to discover how this device actually works.
+Last month I received a [Jawbone UP24](https://web.archive.org/web/20150528014459/https://jawbone.com/store/buy/up24) as birthday gift, and after a couple of weeks of _standard use_ I couldn't resist digging into its technical side to discover how this device actually works.
 
 As far as I discovered, UP24 features a 3 axis accelerometer, 2 notification leds, a vibrating motor and a Bluetooth LE interface to communicate with the companion smartphone app "UP" (available for Android and iOS). Technical readers can find further info and a complete teardown of the _low-end_ version of UP24 (the older UP) [here](https://www.eevblog.com/forum/blog/eevblog-412-jawbone-up-pedometer-teardown/).
 
@@ -26,7 +26,7 @@ So, as usual, the first question is
 
 > "has someone already solved my problem?"
 
-Googling around I found [something here](http://www.plutinosoft.com/hacking-bluetooth-le/) and [here](https://forums.adafruit.com/viewtopic.php?f=8&t=51450).
+Googling around I found [something here](https://web.archive.org/web/20150708024111/http://www.plutinosoft.com/hacking-bluetooth-le) and [here](https://forums.adafruit.com/viewtopic.php?f=8&t=51450).
 ... Perfect! Just no code available, and wrong OS :)
 
 However, thanks to these blogposts I knew it was possible to make vibrate my UP on command, and it had to be done through some custom Bluetooth LE command.
@@ -35,7 +35,7 @@ However, thanks to these blogposts I knew it was possible to make vibrate my UP 
 
 After learning the basics of Bluetooth LE ([here's](https://www.usenix.org/conference/woot13/workshop-program/presentation/ryan) one of the most interesting article I found) I needed to find out how to use it on my Android.
 
-Found a great example and all the necessary documentation [here](http://developer.android.com/samples/BluetoothLeGatt/index.html), and after installing Android Studio I was ready to start!
+Found a great example and all the necessary documentation [here](https://web.archive.org/web/20170708165854/https://developer.android.com/samples/BluetoothLeGatt/index.html), and after installing Android Studio I was ready to start!
 
 ### Doing
 
