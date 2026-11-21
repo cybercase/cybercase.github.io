@@ -9,7 +9,7 @@ import {
   PostType,
   NextPageWithLayout,
 } from "../../lib/constants";
-import { generateRSSFeed } from "../../lib/utils";
+import { generateRSSFeed } from "../../lib/feed";
 import fs from "fs";
 
 export interface PostProps {
@@ -30,11 +30,6 @@ const Blog: NextPageWithLayout<PostProps> = ({ allPosts }: PostProps) => {
   }, [allPosts]);
 
   return (
-    // <BaseLayout
-    //   title={"Blog Archive"}
-    //   description={"Blog of Stefano Brilli"}
-    //   header={<SiteHeader coverDark={false} />}
-    // >
     <nav className="content">
       {Array.from(postsByYear.entries()).map(([year, posts]) => {
         return (
@@ -43,7 +38,7 @@ const Blog: NextPageWithLayout<PostProps> = ({ allPosts }: PostProps) => {
             <ul>
               {posts.map((post) => {
                 return (
-                  <li key={post.date}>
+                  <li key={post.slug}>
                     <Link href={`/blog/${post.slug}`}>
                       {post.coverTitle ?? post.title}
                     </Link>
@@ -55,7 +50,6 @@ const Blog: NextPageWithLayout<PostProps> = ({ allPosts }: PostProps) => {
         );
       })}
     </nav>
-    // </BaseLayout>
   );
 };
 

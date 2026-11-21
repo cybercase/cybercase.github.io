@@ -5,18 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
     "lint": "next lint",
-    "export": "next build",
     "prepare": "husky install",
     "deploy": "next build && gh-pages -d out --dotfiles"
   },
   "dependencies": {
-    "@emotion/css": "^11.9.0",
-    "@emotion/server": "^11.4.0",
     "classnames": "^2.3.1",
     "feed": "^4.2.2",
     "gray-matter": "^4.0.3",
+    "katex": "^0.16.47",
     "next": "^14.2.31",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

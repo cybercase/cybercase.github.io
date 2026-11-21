@@ -1,3 +1,4 @@
+import "katex/dist/katex.min.css";
 import "../styles/main.scss";
 import type { AppProps } from "next/app";
 import { NextPageWithLayout } from "../lib/constants";

@@ -10,7 +10,8 @@ import {
   PostType,
   NextPageWithLayout,
 } from "../../lib/constants";
-import { getAbsoluteURL, markdownToHtml } from "../../lib/utils";
+import { getAbsoluteURL } from "../../lib/url";
+import { markdownToHtml } from "../../lib/markdown";
 
 export interface PostProps {
   post: PostType;
@@ -18,14 +19,13 @@ export interface PostProps {
 
 const Post: NextPageWithLayout<PostProps> = ({ post }) => {
   const { asPath } = useRouter();
-  console.log(asPath);
   return (
     <>
       <Head>
         <meta property="og:title" content={post.title} />
-        <meta name="og:description" content={post.description} />
+        <meta property="og:description" content={post.description} />
         {post.coverImage ? (
-          <meta name="og:image" content={getAbsoluteURL(post.coverImage)} />
+          <meta property="og:image" content={getAbsoluteURL(post.coverImage)} />
         ) : null}
         <meta property="og:url" content={getAbsoluteURL(asPath)} />
         <meta property="og:type" content="website" />

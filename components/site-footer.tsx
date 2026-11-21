@@ -1,4 +1,4 @@
-import { FaTwitter, FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 export const MyFooter: React.FC = () => {
   const iconSize = 20;
