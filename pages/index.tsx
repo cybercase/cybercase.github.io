@@ -44,7 +44,7 @@ Home.getLayout = (page) => {
           cover="/images/cover3.jpg"
           coverTitle="Stefano Brilli"
           coverDark={true}
-          coverSubtitle="Software Engineer and Maker."
+          coverSubtitle="Software Engineer."
           coverTall={true}
         />
       }
